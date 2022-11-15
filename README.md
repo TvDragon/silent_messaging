@@ -1,1 +1,1 @@
-# encrypted_messaging
+# Encrypted Messaging
