@@ -23,7 +23,8 @@ class Client:
 				break
 			print("Message from Server: {}".format(str(data, 'utf-8')))
 
-if len(sys.argv) > 1:
-	client = Client(sys.argv[1])
-else:
-	print("Need to parse in the ip address you will be connecting from as a command line argument.")
+if __name__ == "__main__":
+	if len(sys.argv) > 1:
+		client = Client(sys.argv[1])
+	else:
+		print("Need to parse in the ip address you will be connecting from as a command line argument.")
