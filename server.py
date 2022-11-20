@@ -36,7 +36,8 @@ class Server:
 		while True:
 
 			conn, addr = self.sock.accept()	# Returns connections and client address
-			conn_thread = threading.Thread(target=self.handler, args=(conn, addr))	# Name of function to run
+			conn_thread = threading.Thread(target=self.handler, 
+											args=(conn, addr))	# Name of function to run
 			conn_thread.daemon = True	# Setting to true means program can exit regardless of if there's any threads still running
 			conn_thread.start()			# Start the thread
 			self.connections.append(conn)
