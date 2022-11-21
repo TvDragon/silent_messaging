@@ -1,7 +1,5 @@
-from ipaddress import ip_address
 import socket
 import threading
-import sys
 
 class Client:
 	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
