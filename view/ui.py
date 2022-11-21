@@ -1,7 +1,11 @@
 import PySimpleGUI as sg
-from hashlib import sha256
-from user import User
-from database import write_to_db
+from os import getcwd
+import sys
+
+path = getcwd()[:-4]
+sys.path.insert(0, "{}controller/".format(path))
+
+from events_handler import *
 
 sg.theme('DarkAmber')	# Add a little color to your windows
 
@@ -29,17 +33,7 @@ while True:
 	if event == sg.WINDOW_CLOSED:
 		break
 	if event == "Sign Up":
-		hashed_password = sha256(values["-PASSWORD-"].encode('utf-8')).hexdigest()
-		new_user = User(values["-FULL_NAME-"], values["-USERNAME-"],
-						values["-EMAIL-"], hashed_password)
-		new_user = {
-			"name": values["-FULL_NAME-"],
-			"username": values["-USERNAME-"],
-			"hashed password": hashed_password,
-			"friends": [
-			]
-		}
-		username_taken = write_to_db(new_user)
+		username_taken = add_user(values)
 		
 		if not username_taken:
 			window["-OUTPUT-"].update("")

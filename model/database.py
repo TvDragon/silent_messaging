@@ -2,9 +2,11 @@ import json
 from datetime import datetime
 from threading import Lock
 from os.path import exists
+from os import getcwd
 from log_queries import write_to_log
 
-filename = "users.json"
+path = getcwd()[:-4]
+filename = "{}users.json".format(path)
 lock = Lock()
 
 def get_users():
