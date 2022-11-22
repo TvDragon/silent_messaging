@@ -38,6 +38,9 @@ def login_scene():
 			sg.Text("Sign Up", key="-SIGN_UP-", enable_events=True,
 					text_color="grey")]]
 
+def message_scene():
+	pass
+
 def start_app():
 
 	sg.theme('DarkAmber')	# Add a little color to your windows
@@ -46,7 +49,7 @@ def start_app():
 	login = login_scene()
 
 	# Create the window
-	window = sg.Window('Silent Message', login, element_justification='c',
+	window = sg.Window("Silent Message", login, element_justification='c',
 						size=(512, 240))
 
 	# Display and interact with the Window using an Event Loop
@@ -64,19 +67,22 @@ def start_app():
 				window["-OUTPUT-"].update("Username or Password may be incorrect. User may not exist.")
 		if event == "-SIGN_UP-":
 			window.close()
-			window = sg.Window('Silent Message', sign_up_scene(),
+			window = sg.Window("Silent Message", sign_up_scene(),
 								element_justification='c',
 								size=(512, 240))
 		if event == "Sign Up":
 			username_taken = add_user(values)
 			
 			if not username_taken:
-				window["-OUTPUT-"].update("")
+				window.close()
+				window = sg.Window("Slient Message", message_scene(),
+									element_justification='c',
+									size=(512, 240))
 			else:
 				window["-OUTPUT-"].update("Username is already taken.")
 		if event == "-SIGN_IN-":
 			window.close()
-			window = sg.Window('Silent Message', login_scene(),
+			window = sg.Window("Silent Message", login_scene(),
 								element_justification='c',
 								size=(512, 240))
 
