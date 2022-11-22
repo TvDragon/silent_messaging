@@ -5,8 +5,8 @@ from os.path import exists
 from os import getcwd
 from log_queries import write_to_log
 
-path = getcwd()[:-4]
-filename = "{}users.json".format(path)
+path = getcwd()
+filename = "{}/users.json".format(path)
 lock = Lock()
 
 def get_users():

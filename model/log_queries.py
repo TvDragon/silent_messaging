@@ -1,11 +1,11 @@
 from os import getcwd
 
-path = getcwd()[:-4]
+path = getcwd()
 
 def clear_logs():
-	f = open("{}lqueries.log".format(path), "w+").close()
+	f = open("{}/lqueries.log".format(path), "w+").close()
 
-def write_to_log(text, filename="{}lqueries.log".format(path)):
+def write_to_log(text, filename="{}/lqueries.log".format(path)):
 	with open(filename, "a+") as f:
 		f.write(text + "\n")
 		f.close()

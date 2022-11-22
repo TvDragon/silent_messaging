@@ -3,9 +3,9 @@ import sys
 from os import getcwd
 from hashlib import sha256
 
-path = getcwd()[:-4]
-sys.path.insert(0, "{}model/".format(path))
-sys.path.insert(0, "{}".format(path))
+path = getcwd()
+sys.path.insert(0, "{}/model/".format(path))
+sys.path.insert(0, "{}/".format(path))
 
 from user import User
 from database import write_to_db
