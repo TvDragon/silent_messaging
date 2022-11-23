@@ -8,6 +8,11 @@ sys.path.insert(0, "{}/controller/".format(path))
 
 from events_handler import *
 
+WIDTH = 512
+HEIGHT = 240
+MESSAGE_SCREEN_WIDTH = 1280
+MESSAGE_SCREEN_HEIGHT = 960
+
 def sign_up_scene():
 	return [[sg.Text("Sign Up", font=("Arial", 20))],
 			[sg.Text(key="-OUTPUT-", text_color="yellow")],
@@ -39,7 +44,17 @@ def login_scene():
 					text_color="grey")]]
 
 def message_scene():
-	pass
+	recent_messages = [[sg.Text("Friends", key="-FRIENDS-", enable_events=True,
+							text_color="grey", font=("Arial", 20))],
+						[sg.Text("Direct messages", font=("Arial", 16))]]
+	
+	message = [[sg.Text("Friend A", font=("Arial", 20))],
+				[sg.Text("Message....", font=("Arial", 14))],
+				[sg.Text("Message 2.....", font=("Arial", 14))],
+				[sg.Text("Message 3.....", font=("Arial", 14))]]
+
+	return [[sg.Column(recent_messages, size=(200, MESSAGE_SCREEN_HEIGHT)),
+			sg.Column(message, size=(MESSAGE_SCREEN_WIDTH - 200, MESSAGE_SCREEN_HEIGHT))]]
 
 def start_app():
 
@@ -49,8 +64,8 @@ def start_app():
 	login = login_scene()
 
 	# Create the window
-	window = sg.Window("Silent Message", login, element_justification='c',
-						size=(512, 240))
+	window = sg.Window("Silent Message", message_scene(),
+						size=(MESSAGE_SCREEN_WIDTH, MESSAGE_SCREEN_HEIGHT))
 
 	# Display and interact with the Window using an Event Loop
 	while True:
@@ -62,14 +77,16 @@ def start_app():
 			found_user = find_user(values)
 
 			if found_user:
-				window["-OUTPUT-"].update("")
+				window.close()
+				window = sg.Window("Silent Message", message_scene(),
+									size=(WIDTH, HEIGHT))
 			else:
 				window["-OUTPUT-"].update("Username or Password may be incorrect. User may not exist.")
 		if event == "-SIGN_UP-":
 			window.close()
 			window = sg.Window("Silent Message", sign_up_scene(),
 								element_justification='c',
-								size=(512, 240))
+								size=(WIDTH, HEIGHT))
 		if event == "Sign Up":
 			username_taken = add_user(values)
 			
@@ -77,14 +94,14 @@ def start_app():
 				window.close()
 				window = sg.Window("Slient Message", message_scene(),
 									element_justification='c',
-									size=(512, 240))
+									size=(WIDTH, HEIGHT))
 			else:
 				window["-OUTPUT-"].update("Username is already taken.")
 		if event == "-SIGN_IN-":
 			window.close()
 			window = sg.Window("Silent Message", login_scene(),
 								element_justification='c',
-								size=(512, 240))
+								size=(WIDTH, HEIGHT))
 
 
 	# Finish up by removing from the screen
