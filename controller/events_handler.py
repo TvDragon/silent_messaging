@@ -19,11 +19,14 @@ def add_user(values):
 		"username": values["-USERNAME-"],
 		"hashed password": hashed_password,
 		"friends": [
+		],
+		"recent_dms": [
+
 		]
 	}
 	username_taken = write_to_db(new_user)
 
-	return username_taken
+	return username_taken, new_user
 
 def find_user(values):
 	users = get_users()
@@ -32,6 +35,6 @@ def find_user(values):
 	for user in users:
 		if values["-USERNAME-"] == user["username"] and \
 			hashed_password == user["hashed password"]:
-			return True
+			return True, user
 
-	return False
+	return False, None
