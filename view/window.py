@@ -173,10 +173,14 @@ def start_app():
 		if event == "Send Friend Request":
 			success = add_friend(curr_user, values)
 			
-			if success:
+			if success == 0:
 				window["-FRIEND_ADDED_SUCCESS-"].update("Added friend successfully.")
-			else:
-				window["-FRIEND_ADDED_SUCCESS-"].update("Username doesn't exist.")
+			elif success == 1:
+				window["-FRIEND_ADDED_SUCCESS-"].update("Cannot add yourself.")
+			elif success == 2:
+				window["-FRIEND_ADDED_SUCCESS-"].update("Friend already added.")
+			elif success == 3:
+				window["-FRIEND_ADDED_SUCCESS-"].update("Username does not exist.")
 
 		if curr_user != None:
 			# Loop through names and check if event match against any of the names pressed

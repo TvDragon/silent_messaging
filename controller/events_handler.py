@@ -42,7 +42,7 @@ def find_user(values):
 def add_friend(curr_user, values):
 	username = values["-USERNAME_ADD-"]
 	if curr_user["username"] == username:
-		return False
+		return 1
 
 	users = get_users()
 
@@ -51,7 +51,7 @@ def add_friend(curr_user, values):
 			friends_ls = curr_user["friends"]
 			for friend in friends_ls:
 				if friend == username:
-					return False	# Friend already added
+					return 2	# Friend already added
 
 			friends_ls.append(username)
 			curr_user["friends"] = friends_ls
@@ -61,6 +61,6 @@ def add_friend(curr_user, values):
 			friends_ls.append(curr_user["username"])
 			user["friends"] = friends_ls
 			update_db(user)			
-			return True
+			return 0
 
-	return False
+	return 3
