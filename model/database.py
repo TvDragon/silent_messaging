@@ -19,6 +19,26 @@ def get_users():
 
 	return users
 
+def update_db(curr_user):
+	users = get_users()
+
+	i = 0
+	while (i < len(users)):
+		if users[i]['username'] == curr_user['username']:
+			users[i] = curr_user
+		i += 1
+
+	lock.acquire()				# Lock file for writing so multiple threads cannot write to same file
+	f = open(filename, "w")
+	users = json.dumps(users, indent=4)
+	f.write(users)
+	f.close()
+	current_time = datetime.now()
+	text = "Time: {} - Updated User Details: {}".format(current_time, curr_user["username"])
+	write_to_log(text)
+	lock.release()				# Release lock so other threads can write to file
+	
+
 def write_to_db(new_user):
 	users = get_users()
 

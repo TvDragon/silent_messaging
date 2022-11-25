@@ -71,12 +71,28 @@ def message_scene(user, dm_person):
 	return [[sg.Column(recent_dms, size=(200, MESSAGE_SCREEN_HEIGHT)),
 			sg.Column(message, size=(MESSAGE_SCREEN_WIDTH - 200, MESSAGE_SCREEN_HEIGHT))]]
 
+def add_friend_scene(user):
+	
+	recent_dms = recent_messages(user)
+
+	find_user = [[sg.Text("Add Friend", font=("Arial", 20))],
+				[sg.Text("Enter a username:", font=("Arial", 16)),
+				sg.Input(key="-USERNAME_ADD-", size=(30, 1),
+				text_color="white"),
+				sg.Button("Send Friend Request")],
+				[sg.Text("", key="-FRIEND_ADDED_SUCCESS-")]
+		]
+
+	return [[sg.Column(recent_dms, size=(200, MESSAGE_SCREEN_HEIGHT)),
+			sg.Column(find_user, size=(MESSAGE_SCREEN_WIDTH - 200, MESSAGE_SCREEN_HEIGHT))]]
+
 def friends_list(user):
 
 	recent_dms = recent_messages(user)
 
-	friends_ls = [[sg.Text("Friends", font=("Arial", 20))],
-			]
+	friends_ls = [[sg.Text("Friends", font=("Arial", 20)),
+					sg.Button("Add Friend")
+			]]
 
 	friends = user["friends"]
 
@@ -144,14 +160,32 @@ def start_app():
 			window = sg.Window("Silent Message", login_scene(),
 								element_justification='c',
 								size=(WIDTH, HEIGHT))
+		if event == "-FRIENDS-":
+			window.close()
+			window = sg.Window("Silent Message", friends_list(curr_user),
+								element_justification='c',
+								size=(MESSAGE_SCREEN_WIDTH, MESSAGE_SCREEN_HEIGHT))
+		if event == "Add Friend":
+			window.close()
+			window = sg.Window("Silent Message", add_friend_scene(curr_user),
+								element_justification='c',
+								size=(MESSAGE_SCREEN_WIDTH, MESSAGE_SCREEN_HEIGHT))
+		if event == "Send Friend Request":
+			success = add_friend(curr_user, values)
+			
+			if success:
+				window["-FRIEND_ADDED_SUCCESS-"].update("Added friend successfully.")
+			else:
+				window["-FRIEND_ADDED_SUCCESS-"].update("Username doesn't exist.")
 
-		# Loop through names and check if event match against any of the names pressed
-		for friend in curr_user["friends"]:
-			if event == "-{}-".format(friend):
-				window.close()
-				window = sg.Window("Silent Message", message_scene(curr_user, friend),
-									element_justification='c',
-									size=(MESSAGE_SCREEN_WIDTH, MESSAGE_SCREEN_HEIGHT))
+		if curr_user != None:
+			# Loop through names and check if event match against any of the names pressed
+			for friend in curr_user["friends"]:
+				if event == "-{}-".format(friend):
+					window.close()
+					window = sg.Window("Silent Message", message_scene(curr_user, friend),
+										element_justification='c',
+										size=(MESSAGE_SCREEN_WIDTH, MESSAGE_SCREEN_HEIGHT))
 
 	# Finish up by removing from the screen
 	window.close()

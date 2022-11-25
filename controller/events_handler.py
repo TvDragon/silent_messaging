@@ -8,7 +8,7 @@ sys.path.insert(0, "{}/model/".format(path))
 sys.path.insert(0, "{}/".format(path))
 
 from user import User
-from database import write_to_db, get_users
+from database import write_to_db, get_users, update_db
 
 def add_user(values):
 	hashed_password = sha256(values["-PASSWORD-"].encode('utf-8')).hexdigest()
@@ -38,3 +38,29 @@ def find_user(values):
 			return True, user
 
 	return False, None
+
+def add_friend(curr_user, values):
+	username = values["-USERNAME_ADD-"]
+	if curr_user["username"] == username:
+		return False
+
+	users = get_users()
+
+	for user in users:
+		if user["username"] == username:
+			friends_ls = curr_user["friends"]
+			for friend in friends_ls:
+				if friend == username:
+					return False	# Friend already added
+
+			friends_ls.append(username)
+			curr_user["friends"] = friends_ls
+			update_db(curr_user)
+			
+			friends_ls = user["friends"]
+			friends_ls.append(curr_user["username"])
+			user["friends"] = friends_ls
+			update_db(user)			
+			return True
+
+	return False
