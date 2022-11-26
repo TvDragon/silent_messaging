@@ -1,5 +1,12 @@
 import socket
 import threading
+import sys
+from os import getcwd
+
+path = getcwd()
+sys.path.insert(0, "{}/controller/".format(path))
+
+from events_handler import perform_task
 
 class Server:
 
@@ -21,9 +28,11 @@ class Server:
 			data = conn.recv(1024)	# Max amount of data we can receive is 1024 bytes
 			# recv() is a blocking function so loop won't run until we actually receive some data
 			# Send data back to users
-			for connection in self.connections:
-				if conn != connection:
-					connection.send(bytes(data))	# Can only send back raw bytes
+			# for connection in self.connections:
+			# 	if conn != connection:
+			# 		connection.send(bytes(data))	# Can only send back raw bytes
+
+			user = perform_task(data)
 			if not data:
 				print(str(addr[0]) + ":" + str(addr[1]), "disconnected")
 				self.connections.remove(conn)	# Remove connection from list of connections

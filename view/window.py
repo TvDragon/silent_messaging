@@ -4,10 +4,9 @@ import sys
 import json
 
 path = getcwd()
+sys.path.insert(0, "{}/".format(path))
 
-sys.path.insert(0, "{}/controller/".format(path))
-
-from events_handler import *
+from client import Client
 
 WIDTH = 512
 HEIGHT = 240
@@ -130,66 +129,68 @@ def start_app(user_client):
 		if event == sg.WINDOW_CLOSED:
 			break
 		if event == "Sign In":
-			found_user, user = find_user(values)
+			# found_user, user = find_user(values)
+			user_client.sign_in(values)
 
-			if found_user:
-				window.close()
-				window = sg.Window("Silent Message", friends_list(user),
-									size=(MESSAGE_SCREEN_WIDTH, MESSAGE_SCREEN_HEIGHT))
-				curr_user = user
-			else:
-				window["-OUTPUT-"].update("Username or Password may be incorrect. User may not exist.")
-		if event == "-SIGN_UP-":
-			window.close()
-			window = sg.Window("Silent Message", sign_up_scene(),
-								element_justification='c',
-								size=(WIDTH, HEIGHT))
-		if event == "Sign Up":
-			username_taken, new_user = add_user(values)
-			
-			if not username_taken:
-				window.close()
-				window = sg.Window("Silent Message", friends_list(new_user),
-									element_justification='c',
-									size=(MESSAGE_SCREEN_WIDTH, MESSAGE_SCREEN_HEIGHT))
-				curr_user = new_user
-			else:
-				window["-OUTPUT-"].update("Username is already taken.")
-		if event == "-SIGN_IN-":
-			window.close()
-			window = sg.Window("Silent Message", login_scene(),
-								element_justification='c',
-								size=(WIDTH, HEIGHT))
-		if event == "-FRIENDS-":
-			window.close()
-			window = sg.Window("Silent Message", friends_list(curr_user),
-								element_justification='c',
-								size=(MESSAGE_SCREEN_WIDTH, MESSAGE_SCREEN_HEIGHT))
-		if event == "Add Friend":
-			window.close()
-			window = sg.Window("Silent Message", add_friend_scene(curr_user),
-								element_justification='c',
-								size=(MESSAGE_SCREEN_WIDTH, MESSAGE_SCREEN_HEIGHT))
-		if event == "Send Friend Request":
-			success = add_friend(curr_user, values)
-			
-			if success == 0:
-				window["-FRIEND_ADDED_SUCCESS-"].update("Added friend successfully.")
-			elif success == 1:
-				window["-FRIEND_ADDED_SUCCESS-"].update("Cannot add yourself.")
-			elif success == 2:
-				window["-FRIEND_ADDED_SUCCESS-"].update("Friend already added.")
-			elif success == 3:
-				window["-FRIEND_ADDED_SUCCESS-"].update("Username does not exist.")
 
-		if curr_user != None:
-			# Loop through names and check if event match against any of the names pressed
-			for friend in curr_user["friends"]:
-				if event == "-{}-".format(friend):
-					window.close()
-					window = sg.Window("Silent Message", message_scene(curr_user, friend),
-										element_justification='c',
-										size=(MESSAGE_SCREEN_WIDTH, MESSAGE_SCREEN_HEIGHT))
+		# 	if found_user:
+		# 		window.close()
+		# 		window = sg.Window("Silent Message", friends_list(user),
+		# 							size=(MESSAGE_SCREEN_WIDTH, MESSAGE_SCREEN_HEIGHT))
+		# 		curr_user = user
+		# 	else:
+		# 		window["-OUTPUT-"].update("Username or Password may be incorrect. User may not exist.")
+		# if event == "-SIGN_UP-":
+		# 	window.close()
+		# 	window = sg.Window("Silent Message", sign_up_scene(),
+		# 						element_justification='c',
+		# 						size=(WIDTH, HEIGHT))
+		# if event == "Sign Up":
+		# 	username_taken, new_user = add_user(values)
+			
+		# 	if not username_taken:
+		# 		window.close()
+		# 		window = sg.Window("Silent Message", friends_list(new_user),
+		# 							element_justification='c',
+		# 							size=(MESSAGE_SCREEN_WIDTH, MESSAGE_SCREEN_HEIGHT))
+		# 		curr_user = new_user
+		# 	else:
+		# 		window["-OUTPUT-"].update("Username is already taken.")
+		# if event == "-SIGN_IN-":
+		# 	window.close()
+		# 	window = sg.Window("Silent Message", login_scene(),
+		# 						element_justification='c',
+		# 						size=(WIDTH, HEIGHT))
+		# if event == "-FRIENDS-":
+		# 	window.close()
+		# 	window = sg.Window("Silent Message", friends_list(curr_user),
+		# 						element_justification='c',
+		# 						size=(MESSAGE_SCREEN_WIDTH, MESSAGE_SCREEN_HEIGHT))
+		# if event == "Add Friend":
+		# 	window.close()
+		# 	window = sg.Window("Silent Message", add_friend_scene(curr_user),
+		# 						element_justification='c',
+		# 						size=(MESSAGE_SCREEN_WIDTH, MESSAGE_SCREEN_HEIGHT))
+		# if event == "Send Friend Request":
+		# 	success = add_friend(curr_user, values)
+			
+		# 	if success == 0:
+		# 		window["-FRIEND_ADDED_SUCCESS-"].update("Added friend successfully.")
+		# 	elif success == 1:
+		# 		window["-FRIEND_ADDED_SUCCESS-"].update("Cannot add yourself.")
+		# 	elif success == 2:
+		# 		window["-FRIEND_ADDED_SUCCESS-"].update("Friend already added.")
+		# 	elif success == 3:
+		# 		window["-FRIEND_ADDED_SUCCESS-"].update("Username does not exist.")
+
+		# if curr_user != None:
+		# 	# Loop through names and check if event match against any of the names pressed
+		# 	for friend in curr_user["friends"]:
+		# 		if event == "-{}-".format(friend):
+		# 			window.close()
+		# 			window = sg.Window("Silent Message", message_scene(curr_user, friend),
+		# 								element_justification='c',
+		# 								size=(MESSAGE_SCREEN_WIDTH, MESSAGE_SCREEN_HEIGHT))
 
 	# Finish up by removing from the screen
 	window.close()

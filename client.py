@@ -1,5 +1,6 @@
 import socket
 import threading
+import json
 
 class Client:
 	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -8,9 +9,9 @@ class Client:
 	user = None
 	port = 10000	
 
-	def send_msg(self):	# Send message to Server
-		while True:
-			self.sock.send(bytes(input(""), 'utf-8'))
+	def sign_in(self, values):	# Send message to Server
+		msg = "Sign In::{}".format(values)
+		self.sock.send(bytes(msg, 'utf-8'))
 
 	def receive_data_loop(self):
 		while True:	# Main thread is on loop continually waiting to receive data
