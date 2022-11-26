@@ -1,6 +1,5 @@
 import PySimpleGUI as sg
 import sys
-import json
 from os import getcwd
 from hashlib import sha256
 
@@ -70,20 +69,22 @@ def perform_task(msg):
 
 	msg = msg.decode('utf8')
 
-	task, details = msg.split("::")
-	
-	if task == "Sign In":
-		print(details)
-		# found_user, user = eval(details)
-		# print(found_user)
-		# if found_user:
-		# 	return user
-		# return None
-	elif task == "Sign Up":
-		pass
-	elif task == "Add Friend":
-		pass
-	elif task == "Send Friend Request":
-		pass
-	elif task == "Forgot Password":
-		pass
+	try:
+		task, details = msg.split("::")
+		
+		if task == "Sign In":
+			values = eval(details)
+			found_user, user = find_user(values)
+			if found_user:
+				return user
+			return None
+		elif task == "Sign Up":
+			pass
+		elif task == "Add Friend":
+			pass
+		elif task == "Send Friend Request":
+			pass
+		elif task == "Forgot Password":
+			pass
+	except ValueError:
+		print("Perform Task Error")

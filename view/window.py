@@ -132,14 +132,17 @@ def start_app(user_client):
 			# found_user, user = find_user(values)
 			user_client.sign_in(values)
 
-
-		# 	if found_user:
-		# 		window.close()
-		# 		window = sg.Window("Silent Message", friends_list(user),
-		# 							size=(MESSAGE_SCREEN_WIDTH, MESSAGE_SCREEN_HEIGHT))
-		# 		curr_user = user
-		# 	else:
-		# 		window["-OUTPUT-"].update("Username or Password may be incorrect. User may not exist.")
+			# Wait until if found user or not
+			while user_client.get_user() == None:
+				pass
+			
+			if user_client.get_user() != False:
+				window.close()
+				window = sg.Window("Silent Message", friends_list(user_client.get_user()),
+									size=(MESSAGE_SCREEN_WIDTH, MESSAGE_SCREEN_HEIGHT))
+				curr_user = user_client.get_user()
+			else:
+				window["-OUTPUT-"].update("Username or Password may be incorrect. User may not exist.")
 		# if event == "-SIGN_UP-":
 		# 	window.close()
 		# 	window = sg.Window("Silent Message", sign_up_scene(),

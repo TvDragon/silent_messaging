@@ -27,12 +27,14 @@ class Server:
 		while True:
 			data = conn.recv(1024)	# Max amount of data we can receive is 1024 bytes
 			# recv() is a blocking function so loop won't run until we actually receive some data
-			# Send data back to users
-			# for connection in self.connections:
-			# 	if conn != connection:
-			# 		connection.send(bytes(data))	# Can only send back raw bytes
 
 			user = perform_task(data)
+			msg = ""
+			if user != None:
+				msg = "Sign In::{}".format(str(user))
+			
+			conn.send(bytes(msg, 'utf-8'))	# Send into back to user
+
 			if not data:
 				print(str(addr[0]) + ":" + str(addr[1]), "disconnected")
 				self.connections.remove(conn)	# Remove connection from list of connections

@@ -19,18 +19,29 @@ class Client:
 
 			if not data:
 				break
-			print("Message from Server: {}".format(str(data, 'utf-8')))
+
+			data = data.decode('utf-8')
+			try:
+				task, details = data.split("::")
+
+				if task == "Sign In":
+					values = eval(details)
+					self.user = values
+				else:
+					self.user = False
+			except ValueError:
+				pass
 
 	def __init__(self):
 		self.sock.connect((self.ip_addr, 10000))	# Connect to server with client's ip addr and port
-		print(self.ip_addr)
+		print("{} has connected to server.".format(self.ip_addr))
 		# send_thread = threading.Thread(target=self.send_msg)	# Separate thread is needed to send to server
 		# send_thread.daemon = True	# Will close thread when we exit program
 		# send_thread.start()			# Start thread
 
-		# receive_thread = threading.Thread(target=self.receive_data_loop)
-		# receive_thread.daemon = True
-		# receive_thread.start()
+		receive_thread = threading.Thread(target=self.receive_data_loop)
+		receive_thread.daemon = True
+		receive_thread.start()
 
 	def set_user(self, user):
 		self.user = user
