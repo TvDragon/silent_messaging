@@ -114,8 +114,6 @@ def start_app(user_client):
 	window = sg.Window("Silent Message", login, element_justification='c',
 						size=(WIDTH, HEIGHT))
 
-	curr_user = None
-
 	# Display and interact with the Window using an Event Loop
 	while True:
 		event, values = window.read()
@@ -133,7 +131,6 @@ def start_app(user_client):
 				window.close()
 				window = sg.Window("Silent Message", friends_list(user_client.get_user()),
 									size=(MESSAGE_SCREEN_WIDTH, MESSAGE_SCREEN_HEIGHT))
-				curr_user = user_client.get_user()
 			else:
 				window["-OUTPUT-"].update("Username or Password may be incorrect. User may not exist.")
 				user_client.set_user(None)
@@ -155,7 +152,6 @@ def start_app(user_client):
 				window = sg.Window("Silent Message", friends_list(user_client.get_user()),
 									element_justification='c',
 									size=(MESSAGE_SCREEN_WIDTH, MESSAGE_SCREEN_HEIGHT))
-				curr_user = user_client.get_user()
 			else:
 				window["-OUTPUT-"].update("Username is already taken.")
 				user_client.set_user(None)
@@ -164,11 +160,11 @@ def start_app(user_client):
 			window = sg.Window("Silent Message", login_scene(),
 								element_justification='c',
 								size=(WIDTH, HEIGHT))
-		# if event == "-FRIENDS-":
-		# 	window.close()
-		# 	window = sg.Window("Silent Message", friends_list(curr_user),
-		# 						element_justification='c',
-		# 						size=(MESSAGE_SCREEN_WIDTH, MESSAGE_SCREEN_HEIGHT))
+		if event == "-FRIENDS-":
+			window.close()
+			window = sg.Window("Silent Message", friends_list(user_client.get_user()),
+								element_justification='c',
+								size=(MESSAGE_SCREEN_WIDTH, MESSAGE_SCREEN_HEIGHT))
 		# if event == "Add Friend":
 		# 	window.close()
 		# 	window = sg.Window("Silent Message", add_friend_scene(curr_user),
