@@ -114,12 +114,6 @@ def start_app(user_client):
 	window = sg.Window("Silent Message", login, element_justification='c',
 						size=(WIDTH, HEIGHT))
 
-	friend_tmp = {
-        "name": "Bob Do",
-        "username": "BobD",
-        "hashed password": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
-        "friends": []
-    }
 	curr_user = None
 
 	# Display and interact with the Window using an Event Loop
@@ -129,7 +123,6 @@ def start_app(user_client):
 		if event == sg.WINDOW_CLOSED:
 			break
 		if event == "Sign In":
-			# found_user, user = find_user(values)
 			user_client.sign_in(values)
 
 			# Wait until if found user or not
@@ -143,27 +136,34 @@ def start_app(user_client):
 				curr_user = user_client.get_user()
 			else:
 				window["-OUTPUT-"].update("Username or Password may be incorrect. User may not exist.")
-		# if event == "-SIGN_UP-":
-		# 	window.close()
-		# 	window = sg.Window("Silent Message", sign_up_scene(),
-		# 						element_justification='c',
-		# 						size=(WIDTH, HEIGHT))
-		# if event == "Sign Up":
-		# 	username_taken, new_user = add_user(values)
+				user_client.set_user(None)
+		if event == "-SIGN_UP-":
+			window.close()
+			window = sg.Window("Silent Message", sign_up_scene(),
+								element_justification='c',
+								size=(WIDTH, HEIGHT))
+		if event == "Sign Up":
+			# username_taken, new_user = add_user(values)
+			user_client.sign_up(values)
+
+			# Wait until if found user or not
+			while user_client.get_user() == None:
+				pass
 			
-		# 	if not username_taken:
-		# 		window.close()
-		# 		window = sg.Window("Silent Message", friends_list(new_user),
-		# 							element_justification='c',
-		# 							size=(MESSAGE_SCREEN_WIDTH, MESSAGE_SCREEN_HEIGHT))
-		# 		curr_user = new_user
-		# 	else:
-		# 		window["-OUTPUT-"].update("Username is already taken.")
-		# if event == "-SIGN_IN-":
-		# 	window.close()
-		# 	window = sg.Window("Silent Message", login_scene(),
-		# 						element_justification='c',
-		# 						size=(WIDTH, HEIGHT))
+			if user_client.get_user() != False:
+				window.close()
+				window = sg.Window("Silent Message", friends_list(user_client.get_user()),
+									element_justification='c',
+									size=(MESSAGE_SCREEN_WIDTH, MESSAGE_SCREEN_HEIGHT))
+				curr_user = user_client.get_user()
+			else:
+				window["-OUTPUT-"].update("Username is already taken.")
+				user_client.set_user(None)
+		if event == "-SIGN_IN-":
+			window.close()
+			window = sg.Window("Silent Message", login_scene(),
+								element_justification='c',
+								size=(WIDTH, HEIGHT))
 		# if event == "-FRIENDS-":
 		# 	window.close()
 		# 	window = sg.Window("Silent Message", friends_list(curr_user),

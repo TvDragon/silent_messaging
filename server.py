@@ -32,6 +32,10 @@ class Server:
 			msg = ""
 			if user != None:
 				msg = "Sign In::{}".format(str(user))
+			elif user == None:
+				msg = "Sign In::Error"
+			elif user == False:
+				msg = "Sign Up::Error"
 			
 			conn.send(bytes(msg, 'utf-8'))	# Send into back to user
 

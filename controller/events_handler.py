@@ -12,12 +12,13 @@ from database import write_to_db, get_users, update_db
 
 def add_user(values):
 	hashed_password = sha256(values["-PASSWORD-"].encode('utf-8')).hexdigest()
-	new_user = User(values["-FULL_NAME-"], values["-USERNAME-"],
-					values["-EMAIL-"], hashed_password)
+	# new_user = User(values["-FULL_NAME-"], values["-USERNAME-"],
+	# 				values["-EMAIL-"], hashed_password)
 	new_user = {
 		"name": values["-FULL_NAME-"],
 		"username": values["-USERNAME-"],
 		"hashed password": hashed_password,
+		"email": values["-EMAIL-"],
 		"friends": [
 		],
 		"recent_dms": [
@@ -79,7 +80,11 @@ def perform_task(msg):
 				return user
 			return None
 		elif task == "Sign Up":
-			pass
+			values = eval(details)
+			username_taken, new_user = add_user(values)
+			if not username_taken:
+				return new_user
+			return False
 		elif task == "Add Friend":
 			pass
 		elif task == "Send Friend Request":

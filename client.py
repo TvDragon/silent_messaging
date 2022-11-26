@@ -7,11 +7,18 @@ class Client:
 	hostname = socket.gethostname()
 	ip_addr = socket.gethostbyname(hostname)
 	user = None
-	port = 10000	
+	port = 10000
+
+	def send_msg(self, msg):
+		self.sock.send(bytes(msg, 'utf-8'))
 
 	def sign_in(self, values):	# Send message to Server
 		msg = "Sign In::{}".format(values)
-		self.sock.send(bytes(msg, 'utf-8'))
+		self.send_msg(msg)
+
+	def sign_up(self, values):
+		msg = "Sign Up::{}".format(values)
+		self.send_msg(msg)
 
 	def receive_data_loop(self):
 		while True:	# Main thread is on loop continually waiting to receive data
@@ -25,23 +32,27 @@ class Client:
 				task, details = data.split("::")
 
 				if task == "Sign In":
-					values = eval(details)
-					self.user = values
-				else:
-					self.user = False
+					if details != "Error":
+						values = eval(details)
+						self.user = values
+					else:
+						self.user = False
+				elif task == "Sign Up":
+					if details != "Error":
+						values = eval(details)
+						self.user = values
+					else:
+						self.user = False
 			except ValueError:
 				pass
 
 	def __init__(self):
 		self.sock.connect((self.ip_addr, 10000))	# Connect to server with client's ip addr and port
 		print("{} has connected to server.".format(self.ip_addr))
-		# send_thread = threading.Thread(target=self.send_msg)	# Separate thread is needed to send to server
-		# send_thread.daemon = True	# Will close thread when we exit program
-		# send_thread.start()			# Start thread
 
-		receive_thread = threading.Thread(target=self.receive_data_loop)
-		receive_thread.daemon = True
-		receive_thread.start()
+		receive_thread = threading.Thread(target=self.receive_data_loop) # Separate thread is needed to receive from server
+		receive_thread.daemon = True # Will close thread when we exit program
+		receive_thread.start()		# Start thread
 
 	def set_user(self, user):
 		self.user = user
