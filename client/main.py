@@ -1,10 +1,4 @@
-from os import getcwd
-import sys
 from client import Client
-
-path = getcwd()
-sys.path.insert(0, "{}/view/".format(path))
-
 from window import *
 
 def main():

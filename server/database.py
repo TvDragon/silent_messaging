@@ -61,3 +61,8 @@ def write_to_db(new_user):
 		lock.release()				# Release lock so other threads can write to file
 
 	return username_taken
+
+def write_log_connection(msg):
+	lock.acquire()
+	write_to_log(msg)
+	lock.release()

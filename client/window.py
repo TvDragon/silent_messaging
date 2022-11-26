@@ -1,11 +1,4 @@
 import PySimpleGUI as sg
-from os import getcwd
-import sys
-import json
-
-path = getcwd()
-sys.path.insert(0, "{}/".format(path))
-
 from client import Client
 
 WIDTH = 512

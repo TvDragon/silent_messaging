@@ -1,12 +1,7 @@
 import socket
 import threading
-import sys
-from os import getcwd
 
-path = getcwd()
-sys.path.insert(0, "{}/controller/".format(path))
-
-from events_handler import perform_task
+from events_handler import perform_task, log_connection_to_server, log_disconnection_to_server
 
 class Server:
 
@@ -40,7 +35,7 @@ class Server:
 			conn.send(bytes(msg, 'utf-8'))	# Send into back to user
 
 			if not data:
-				print(str(addr[0]) + ":" + str(addr[1]), "disconnected")
+				log_disconnection_to_server(addr)
 				self.connections.remove(conn)	# Remove connection from list of connections
 				conn.close() # Close connection
 				break
@@ -55,8 +50,7 @@ class Server:
 			conn_thread.daemon = True	# Setting to true means program can exit regardless of if there's any threads still running
 			conn_thread.start()			# Start the thread
 			self.connections.append(conn)
-			# print(self.connections)
-			print(str(addr[0]) + ":" + str(addr[1]), "connected")
+			log_connection_to_server(addr)
 
 if __name__ == "__main__":
 	server = Server()

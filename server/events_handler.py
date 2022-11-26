@@ -1,14 +1,16 @@
 import PySimpleGUI as sg
-import sys
-from os import getcwd
 from hashlib import sha256
+from datetime import datetime
 
-path = getcwd()
-sys.path.insert(0, "{}/model/".format(path))
-sys.path.insert(0, "{}/".format(path))
+from database import write_to_db, get_users, update_db, write_log_connection
 
-from user import User
-from database import write_to_db, get_users, update_db
+def log_connection_to_server(addr):
+	msg = "Time: {} - {}:{} connected".format(datetime.now(), str(addr[0]), str(addr[1]))
+	write_log_connection(msg)
+
+def log_disconnection_to_server(addr):
+	msg = "Time: {} - {}:{} disconnected".format(datetime.now(), str(addr[0]), str(addr[1]))
+	write_log_connection(msg)
 
 def add_user(values):
 	hashed_password = sha256(values["-PASSWORD-"].encode('utf-8')).hexdigest()
