@@ -5,6 +5,8 @@ class Client:
 	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	hostname = socket.gethostname()
 	ip_addr = socket.gethostbyname(hostname)
+	user = None
+	port = 10000	
 
 	def send_msg(self):	# Send message to Server
 		while True:
@@ -21,13 +23,19 @@ class Client:
 	def __init__(self):
 		self.sock.connect((self.ip_addr, 10000))	# Connect to server with client's ip addr and port
 		print(self.ip_addr)
-		send_thread = threading.Thread(target=self.send_msg)	# Separate thread is needed to send to server
-		send_thread.daemon = True	# Will close thread when we exit program
-		send_thread.start()			# Start thread
+		# send_thread = threading.Thread(target=self.send_msg)	# Separate thread is needed to send to server
+		# send_thread.daemon = True	# Will close thread when we exit program
+		# send_thread.start()			# Start thread
 
-		receive_thread = threading.Thread(target=self.receive_data_loop)
-		receive_thread.daemon = True
-		receive_thread.start()
+		# receive_thread = threading.Thread(target=self.receive_data_loop)
+		# receive_thread.daemon = True
+		# receive_thread.start()
+
+	def set_user(self, user):
+		self.user = user
+
+	def get_user(self):
+		return self.user
 		
 
 if __name__ == "__main__":

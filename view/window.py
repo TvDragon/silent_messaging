@@ -104,7 +104,7 @@ def friends_list(user):
 	return [[sg.Column(recent_dms, size=(200, MESSAGE_SCREEN_WIDTH)),
 			sg.Column(friends_ls, size=(MESSAGE_SCREEN_WIDTH - 200, MESSAGE_SCREEN_HEIGHT))]]
 
-def start_app():
+def start_app(user_client):
 
 	sg.theme('DarkAmber')	# Add a little color to your windows
 
