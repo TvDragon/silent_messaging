@@ -8,6 +8,7 @@ class Client:
 	ip_addr = socket.gethostbyname(hostname)
 	user = None
 	port = 10000
+	success_code = None
 
 	def send_msg(self, msg):
 		self.sock.send(bytes(msg, 'utf-8'))
@@ -18,6 +19,11 @@ class Client:
 
 	def sign_up(self, values):
 		msg = "Sign Up::{}".format(values)
+		self.send_msg(msg)
+
+	def send_friend_request(self, values):
+		values.update(CURR_USER = self.user)
+		msg = "Send Friend Request::{}".format(values)
 		self.send_msg(msg)
 
 	def receive_data_loop(self):
@@ -43,6 +49,10 @@ class Client:
 						self.user = values
 					else:
 						self.user = False
+				if task == "Send Friend Request":
+					values = eval(details)
+					self.user = values["CURR_USER"]
+					self.success_code = values["-SUCCESS_CODE-"]
 			except ValueError:
 				pass
 
@@ -57,8 +67,14 @@ class Client:
 	def set_user(self, user):
 		self.user = user
 
+	def reset_success_code(self):
+		self.success_code = None
+
 	def get_user(self):
 		return self.user
+
+	def get_success_code(self):
+		return self.success_code
 		
 
 if __name__ == "__main__":

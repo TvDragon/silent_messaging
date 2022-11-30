@@ -83,6 +83,10 @@ def friends_list(user):
 	recent_dms = recent_messages(user)
 
 	friends_ls = [[sg.Text("Friends", font=("Arial", 20)),
+					sg.Text("All", key="-ALL_FRIENDS-", enable_events=True,
+					font=("Arial", 16), text_color="grey"),
+					sg.Text("Pending", key="-PENDING-", enable_events=True,
+					font=("Arial", 16), text_color="grey"),
 					sg.Button("Add Friend")
 			]]
 
@@ -158,22 +162,30 @@ def start_app(user_client):
 			window = sg.Window("Silent Message", friends_list(user_client.get_user()),
 								element_justification='c',
 								size=(MESSAGE_SCREEN_WIDTH, MESSAGE_SCREEN_HEIGHT))
-		# if event == "Add Friend":
-		# 	window.close()
-		# 	window = sg.Window("Silent Message", add_friend_scene(curr_user),
-		# 						element_justification='c',
-		# 						size=(MESSAGE_SCREEN_WIDTH, MESSAGE_SCREEN_HEIGHT))
-		# if event == "Send Friend Request":
-		# 	success = add_friend(curr_user, values)
+		if event == "Add Friend":
+			window.close()
+			window = sg.Window("Silent Message", add_friend_scene(user_client.get_user()),
+								element_justification='c',
+								size=(MESSAGE_SCREEN_WIDTH, MESSAGE_SCREEN_HEIGHT))
+		if event == "Send Friend Request":
+			user_client.send_friend_request(values)
+
+			# Wait until if sending friend request complete
+			while user_client.get_success_code() == None:
+				pass
 			
-		# 	if success == 0:
-		# 		window["-FRIEND_ADDED_SUCCESS-"].update("Added friend successfully.")
-		# 	elif success == 1:
-		# 		window["-FRIEND_ADDED_SUCCESS-"].update("Cannot add yourself.")
-		# 	elif success == 2:
-		# 		window["-FRIEND_ADDED_SUCCESS-"].update("Friend already added.")
-		# 	elif success == 3:
-		# 		window["-FRIEND_ADDED_SUCCESS-"].update("Username does not exist.")
+			if user_client.get_success_code()== 0:
+				window["-FRIEND_ADDED_SUCCESS-"].update("Sent friend request successfully.")
+			elif user_client.get_success_code()== 1:
+				window["-FRIEND_ADDED_SUCCESS-"].update("Cannot add yourself.")
+			elif user_client.get_success_code()== 2:
+				window["-FRIEND_ADDED_SUCCESS-"].update("Friend already added.")
+			elif user_client.get_success_code()== 3:
+				window["-FRIEND_ADDED_SUCCESS-"].update("Friend request is pending.")
+			elif user_client.get_success_code()== 4:
+				window["-FRIEND_ADDED_SUCCESS-"].update("Username does not exist.")
+			
+			user_client.reset_success_code()
 
 		# if curr_user != None:
 		# 	# Loop through names and check if event match against any of the names pressed
