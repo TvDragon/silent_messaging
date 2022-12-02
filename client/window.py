@@ -99,11 +99,25 @@ def pending_friends_scene(user):
 		waiting = pending["waiting"]
 		if waiting == "waiting_other_user":
 			pending_friends_ls.append([sg.Text("{}".format(username),
-										key="-{}-".format(),
-										enable_events=True, font=("Arial", 14),
-										text_color="grey")])
+											font=("Arial", 14)),
+										sg.Text("X",
+											key="-X_{}-".format(username),
+											enable_events=True,
+											font=("Arial", 14),
+											text_color="red")])	# Option to cancel friend request
 		else:
-			pass
+			pending_friends_ls.append([sg.Text("{}".format(username),
+											font=("Arial", 14)),
+										sg.Text("Y",
+											key="-Y_{}-".format(username),
+											enable_events=True,
+											font=("Arial", 14),
+											text_color="green"),	# Option to accept friend request
+										sg.Text("X",
+											key="-X_{}-".format(username),
+											enable_events=True,
+											font=("Arial", 14),
+											text_color="red")])	# Option to deny friend request
 
 	return [[sg.Column(recent_dms, size=(200, MESSAGE_SCREEN_WIDTH)),
 			sg.Column(pending_friends_ls, size=(MESSAGE_SCREEN_WIDTH - 200,
