@@ -249,14 +249,23 @@ def start_app(user_client):
 								size=(MESSAGE_SCREEN_WIDTH,
 										MESSAGE_SCREEN_HEIGHT))
 
-		# if curr_user != None:
-		# 	# Loop through names and check if event match against any of the names pressed
-		# 	for friend in curr_user["friends"]:
-		# 		if event == "-{}-".format(friend):
-		# 			window.close()
-		# 			window = sg.Window("Silent Message", message_scene(curr_user, friend),
-		# 								element_justification='c',
-		# 								size=(MESSAGE_SCREEN_WIDTH, MESSAGE_SCREEN_HEIGHT))
+		if user_client.get_user() != None:
+			# Loop through names and check if event match against any of the names pressed
+			for friend in user_client.get_user()["friends"]:
+				if event == "-{}-".format(friend):
+					window.close()
+					window = sg.Window("Silent Message",
+										message_scene(user_client.get_user(),
+														friend),
+										element_justification='c',
+										size=(MESSAGE_SCREEN_WIDTH,
+												MESSAGE_SCREEN_HEIGHT))
+			
+			for pending in user_client.get_user()["pending"]:
+				if event == "-Y_{}-".format(pending["username"]):
+					print("Accept for user: {}".format(pending["username"]))
+				else:
+					print("Deny for user: {}".format(pending["username"]))
 
 	# Finish up by removing from the screen
 	window.close()
