@@ -5,11 +5,13 @@ from datetime import datetime
 from database import write_to_db, get_users, update_db, write_log_connection
 
 def log_connection_to_server(addr):
-	msg = "Time: {} - {}:{} connected".format(datetime.now(), str(addr[0]), str(addr[1]))
+	msg = "Time: {} - {}:{} connected".format(datetime.now(),
+												str(addr[0]), str(addr[1]))
 	write_log_connection(msg)
 
 def log_disconnection_to_server(addr):
-	msg = "Time: {} - {}:{} disconnected".format(datetime.now(), str(addr[0]), str(addr[1]))
+	msg = "Time: {} - {}:{} disconnected".format(datetime.now(),
+													str(addr[0]), str(addr[1]))
 	write_log_connection(msg)
 
 def add_user(values):
@@ -68,7 +70,7 @@ def add_friend(values):
 			update_db(curr_user)
 			
 			pending_ls = user["pending"]
-			block = {"username": "{}".format(curr_user["username"]), 
+			block = {"username": "{}".format(curr_user["username"]),
 					"waiting": "waiting_on_you"}
 			pending_ls.append(block)
 			user["pending"] = pending_ls

@@ -34,7 +34,8 @@ def update_db(curr_user):
 	f.write(users)
 	f.close()
 	current_time = datetime.now()
-	text = "Time: {} - Updated User Details: {}".format(current_time, curr_user["username"])
+	text = "Time: {} - Updated User Details: {}".format(current_time,
+														curr_user["username"])
 	write_to_log(text)
 	lock.release()				# Release lock so other threads can write to file
 	
@@ -56,7 +57,8 @@ def write_to_db(new_user):
 		f.write(users)
 		f.close()
 		current_time = datetime.now()
-		text = "Time: {} - New User Added: {}".format(current_time, new_user["username"])
+		text = "Time: {} - New User Added: {}".format(current_time,
+														new_user["username"])
 		write_to_log(text)
 		lock.release()				# Release lock so other threads can write to file
 

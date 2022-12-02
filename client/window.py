@@ -61,7 +61,8 @@ def message_scene(user, dm_person):
 	# Find dm_person and loop through messages with them
 
 	return [[sg.Column(recent_dms, size=(200, MESSAGE_SCREEN_HEIGHT)),
-			sg.Column(message, size=(MESSAGE_SCREEN_WIDTH - 200, MESSAGE_SCREEN_HEIGHT))]]
+			sg.Column(message, size=(MESSAGE_SCREEN_WIDTH - 200,
+										MESSAGE_SCREEN_HEIGHT))]]
 
 def add_friend_scene(user):
 	
@@ -76,7 +77,37 @@ def add_friend_scene(user):
 		]
 
 	return [[sg.Column(recent_dms, size=(200, MESSAGE_SCREEN_HEIGHT)),
-			sg.Column(find_user, size=(MESSAGE_SCREEN_WIDTH - 200, MESSAGE_SCREEN_HEIGHT))]]
+			sg.Column(find_user, size=(MESSAGE_SCREEN_WIDTH - 200,
+										MESSAGE_SCREEN_HEIGHT))]]
+
+def pending_friends_scene(user):
+	
+	recent_dms = recent_messages(user)
+
+	pending_friends_ls = [[sg.Text("Friends", font=("Arial", 20)),
+					sg.Text("All", key="-ALL_FRIENDS-", enable_events=True,
+					font=("Arial", 16), text_color="grey"),
+					sg.Text("Pending", key="-PENDING-", enable_events=True,
+					font=("Arial", 16), text_color="grey"),
+					sg.Button("Add Friend")
+			]]
+
+	pending_friends = user["pending"]
+
+	for pending in pending_friends:
+		username = pending["username"]
+		waiting = pending["waiting"]
+		if waiting == "waiting_other_user":
+			pending_friends_ls.append([sg.Text("{}".format(username),
+										key="-{}-".format(),
+										enable_events=True, font=("Arial", 14),
+										text_color="grey")])
+		else:
+			pass
+
+	return [[sg.Column(recent_dms, size=(200, MESSAGE_SCREEN_WIDTH)),
+			sg.Column(pending_friends_ls, size=(MESSAGE_SCREEN_WIDTH - 200,
+												MESSAGE_SCREEN_HEIGHT))]]
 
 def friends_list(user):
 
@@ -93,12 +124,14 @@ def friends_list(user):
 	friends = user["friends"]
 
 	for friend in friends:
-		friends_ls.append([sg.Text("{}".format(friend), key="-{}-".format(friend),
+		friends_ls.append([sg.Text("{}".format(friend),
+							key="-{}-".format(friend),
 							enable_events=True, font=("Arial", 14),
 							text_color="grey")])
 
 	return [[sg.Column(recent_dms, size=(200, MESSAGE_SCREEN_WIDTH)),
-			sg.Column(friends_ls, size=(MESSAGE_SCREEN_WIDTH - 200, MESSAGE_SCREEN_HEIGHT))]]
+			sg.Column(friends_ls, size=(MESSAGE_SCREEN_WIDTH - 200,
+											MESSAGE_SCREEN_HEIGHT))]]
 
 def start_app(user_client):
 
@@ -117,7 +150,7 @@ def start_app(user_client):
 		# See if user wants to quit or window was closed
 		if event == sg.WINDOW_CLOSED:
 			break
-		if event == "Sign In":
+		elif event == "Sign In":
 			user_client.sign_in(values)
 
 			# Wait until if found user or not
@@ -126,17 +159,19 @@ def start_app(user_client):
 			
 			if user_client.get_user() != False:
 				window.close()
-				window = sg.Window("Silent Message", friends_list(user_client.get_user()),
-									size=(MESSAGE_SCREEN_WIDTH, MESSAGE_SCREEN_HEIGHT))
+				window = sg.Window("Silent Message",
+									friends_list(user_client.get_user()),
+									size=(MESSAGE_SCREEN_WIDTH,
+											MESSAGE_SCREEN_HEIGHT))
 			else:
 				window["-OUTPUT-"].update("Username or Password may be incorrect. User may not exist.")
 				user_client.set_user(None)
-		if event == "-SIGN_UP-":
+		elif event == "-SIGN_UP-":
 			window.close()
 			window = sg.Window("Silent Message", sign_up_scene(),
 								element_justification='c',
 								size=(WIDTH, HEIGHT))
-		if event == "Sign Up":
+		elif event == "Sign Up":
 			# username_taken, new_user = add_user(values)
 			user_client.sign_up(values)
 
@@ -146,28 +181,34 @@ def start_app(user_client):
 			
 			if user_client.get_user() != False:
 				window.close()
-				window = sg.Window("Silent Message", friends_list(user_client.get_user()),
+				window = sg.Window("Silent Message",
+									friends_list(user_client.get_user()),
 									element_justification='c',
-									size=(MESSAGE_SCREEN_WIDTH, MESSAGE_SCREEN_HEIGHT))
+									size=(MESSAGE_SCREEN_WIDTH,
+											MESSAGE_SCREEN_HEIGHT))
 			else:
 				window["-OUTPUT-"].update("Username is already taken.")
 				user_client.set_user(None)
-		if event == "-SIGN_IN-":
+		elif event == "-SIGN_IN-":
 			window.close()
 			window = sg.Window("Silent Message", login_scene(),
 								element_justification='c',
 								size=(WIDTH, HEIGHT))
-		if event == "-FRIENDS-":
+		elif event == "-FRIENDS-" or event == "-ALL_FRIENDS-":
 			window.close()
-			window = sg.Window("Silent Message", friends_list(user_client.get_user()),
+			window = sg.Window("Silent Message",
+								friends_list(user_client.get_user()),
 								element_justification='c',
-								size=(MESSAGE_SCREEN_WIDTH, MESSAGE_SCREEN_HEIGHT))
-		if event == "Add Friend":
+								size=(MESSAGE_SCREEN_WIDTH,
+										MESSAGE_SCREEN_HEIGHT))
+		elif event == "Add Friend":
 			window.close()
-			window = sg.Window("Silent Message", add_friend_scene(user_client.get_user()),
+			window = sg.Window("Silent Message",
+								add_friend_scene(user_client.get_user()),
 								element_justification='c',
-								size=(MESSAGE_SCREEN_WIDTH, MESSAGE_SCREEN_HEIGHT))
-		if event == "Send Friend Request":
+								size=(MESSAGE_SCREEN_WIDTH,
+										MESSAGE_SCREEN_HEIGHT))
+		elif event == "Send Friend Request":
 			user_client.send_friend_request(values)
 
 			# Wait until if sending friend request complete
@@ -186,6 +227,13 @@ def start_app(user_client):
 				window["-FRIEND_ADDED_SUCCESS-"].update("Username does not exist.")
 			
 			user_client.reset_success_code()
+		elif event == "-PENDING-":
+			window.close()
+			window = sg.Window("Silent Message",
+								pending_friends_scene(user_client.get_user()),
+								element_justification='c',
+								size=(MESSAGE_SCREEN_WIDTH,
+										MESSAGE_SCREEN_HEIGHT))
 
 		# if curr_user != None:
 		# 	# Loop through names and check if event match against any of the names pressed
