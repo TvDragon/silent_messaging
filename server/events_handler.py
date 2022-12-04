@@ -79,13 +79,54 @@ def add_friend(values):
 
 	return 4, curr_user	# Username doesn't exist
 
+def respond_friend_request(values):
+	username = values["username"]
+	curr_user = values["CURR_USER"]
+	response = values["-ACCEPT-"]
+
+	users = get_users()
+
+	for user in users:
+		if user["username"] == username:
+			friends_ls = curr_user["friends"]
+			pending_ls = curr_user["pending"]
+
+			if response == "YES":
+				friends_ls.append(username)
+				curr_user["friends"] = friends_ls
+				update_db(curr_user)
+
+				friends_ls = user["friends"]
+				friends_ls.append(curr_user["username"])
+				update_db(user)
+
+			new_pending_ls = []
+			for waiting_user in pending_ls:
+				if waiting_user["username"] != username:
+					new_pending_ls.append(waiting_user)	
+
+			curr_user["pending"] = new_pending_ls
+			update_db(curr_user)
+
+			pending_ls = user["pending"]
+			new_pending_ls = []
+			for waiting_user in pending_ls:
+				if waiting_user["username"] != curr_user["username"]:
+					new_pending_ls.append(waiting_user)
+
+			user["pending"] = new_pending_ls
+			update_db(user)
+			break
+
+	return 500, curr_user
+
 def perform_task(msg):
 
 	msg = msg.decode('utf8')
 
 	try:
 		task, details = msg.split("::")
-		
+		print(task)
 		if task == "Sign In":
 			values = eval(details)
 			found_user, user = find_user(values)
@@ -104,6 +145,9 @@ def perform_task(msg):
 			values = eval(details)
 			success, user = add_friend(values)
 			return success, user
+		elif task == "Respond Friend Request":
+			values = eval(details)
+			return respond_friend_request(values)
 		elif task == "Forgot Password":
 			pass
 	except ValueError:

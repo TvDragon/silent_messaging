@@ -25,6 +25,11 @@ class Client:
 		values.update(CURR_USER = self.user)
 		msg = "Send Friend Request::{}".format(values)
 		self.send_msg(msg)
+	
+	def respond_friend_request(self, values):
+		values.update(CURR_USER = self.user)
+		msg = "Respond Friend Request::{}".format(values)
+		self.send_msg(msg)
 
 	def receive_data_loop(self):
 		while True:	# Main thread is on loop continually waiting to receive data
@@ -49,7 +54,11 @@ class Client:
 						self.user = values
 					else:
 						self.user = False
-				if task == "Send Friend Request":
+				elif task == "Send Friend Request":
+					values = eval(details)
+					self.user = values["CURR_USER"]
+					self.success_code = values["-SUCCESS_CODE-"]
+				elif task == "Respond Friend Request":
 					values = eval(details)
 					self.user = values["CURR_USER"]
 					self.success_code = values["-SUCCESS_CODE-"]

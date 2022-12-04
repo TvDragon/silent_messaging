@@ -31,6 +31,10 @@ class Server:
 				msg = "Sign In::Error"
 			elif user == False:
 				msg = "Sign Up::Error"
+			elif success == 500:
+				values = {"-SUCCESS_CODE-": success}
+				values.update(CURR_USER = user)
+				msg = "Respond Friend Request::{}".format(values)
 			elif user != None:
 				values = {"-SUCCESS_CODE-": success}
 				values.update(CURR_USER = user)

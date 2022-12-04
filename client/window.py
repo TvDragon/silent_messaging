@@ -263,9 +263,33 @@ def start_app(user_client):
 			
 			for pending in user_client.get_user()["pending"]:
 				if event == "-Y_{}-".format(pending["username"]):
-					print("Accept for user: {}".format(pending["username"]))
-				else:
-					print("Deny for user: {}".format(pending["username"]))
+					values = {"username": pending["username"], "-ACCEPT-": "YES"}
+					user_client.respond_friend_request(values)
+					
+					# Wait until if sending friend request complete
+					while user_client.get_success_code() == None:
+						pass
+
+					window.close()
+					window = sg.Window("Silent Message",
+								pending_friends_scene(user_client.get_user()),
+								element_justification='c',
+								size=(MESSAGE_SCREEN_WIDTH,
+										MESSAGE_SCREEN_HEIGHT))
+				elif event == "-X_{}-".format(pending["username"]):
+					values = {"username": pending["username"], "-ACCEPT-": "NO"}
+					user_client.respond_friend_request(values)
+
+					# Wait until if sending friend request complete
+					while user_client.get_success_code() == None:
+						pass
+					
+					window.close()
+					window = sg.Window("Silent Message",
+								pending_friends_scene(user_client.get_user()),
+								element_justification='c',
+								size=(MESSAGE_SCREEN_WIDTH,
+										MESSAGE_SCREEN_HEIGHT))
 
 	# Finish up by removing from the screen
 	window.close()
