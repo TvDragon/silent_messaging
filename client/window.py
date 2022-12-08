@@ -1,5 +1,6 @@
 import PySimpleGUI as sg
 from client import Client
+from model import create_msg_file
 
 WIDTH = 512
 HEIGHT = 240
@@ -177,6 +178,7 @@ def start_app(user_client):
 									friends_list(user_client.get_user()),
 									size=(MESSAGE_SCREEN_WIDTH,
 											MESSAGE_SCREEN_HEIGHT))
+				create_msg_file(user_client.get_user())
 			else:
 				window["-OUTPUT-"].update("Username or Password may be incorrect. User may not exist.")
 				user_client.set_user(None)

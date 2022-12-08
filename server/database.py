@@ -10,6 +10,7 @@ filename = "{}/users.json".format(path)
 lock = Lock()
 
 def get_users():
+	lock.acquire()				# Lock file for no modifications can be made when reading file
 	if exists(filename):
 		f = open(filename, "r")
 		users = json.load(f)
@@ -17,6 +18,7 @@ def get_users():
 	else:
 		users = []
 
+	lock.release()				# Release lock so other threads can access file
 	return users
 
 def update_db(curr_user):

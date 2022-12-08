@@ -1,6 +1,5 @@
 import socket
 import threading
-import json
 
 class Client:
 	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -84,7 +83,3 @@ class Client:
 
 	def get_success_code(self):
 		return self.success_code
-		
-
-if __name__ == "__main__":
-	client = Client()
