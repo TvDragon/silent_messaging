@@ -19,10 +19,10 @@ def add_user(values):
 	# new_user = User(values["-FULL_NAME-"], values["-USERNAME-"],
 	# 				values["-EMAIL-"], hashed_password)
 	new_user = {
-		"name": values["-FULL_NAME-"],
 		"username": values["-USERNAME-"],
 		"hashed password": hashed_password,
 		"email": values["-EMAIL-"],
+		"public key": str(values["PUBLIC_KEY"]),	# Will need to convert this back to bytes when encrypting messages
 		"friends": [],
 		"recent_dms": [],
 		"pending": []

@@ -1,6 +1,6 @@
 import PySimpleGUI as sg
 from client import Client
-from model import create_msg_file
+from model import create_msg_file, generate_key_pair, write_key_pair
 
 WIDTH = 512
 HEIGHT = 240
@@ -10,8 +10,6 @@ MESSAGE_SCREEN_HEIGHT = 960
 def sign_up_scene():
 	return [[sg.Text("Sign Up", font=("Arial", 20))],
 			[sg.Text(key="-OUTPUT-", text_color="yellow")],
-			[sg.Text("Full Name"), sg.Input(key="-FULL_NAME-", size=(30, 1),
-				text_color="white")],
 			[sg.Text("Username"), sg.Input(key="-USERNAME-", size=(30, 1),
 				text_color="white")],
 			[sg.Text("Email\t"), sg.Input(key="-EMAIL-", size=(30, 1),
@@ -188,7 +186,7 @@ def start_app(user_client):
 								element_justification='c',
 								size=(WIDTH, HEIGHT))
 		elif event == "Sign Up":
-			# username_taken, new_user = add_user(values)
+			values, private_key, public_key = generate_key_pair(values)
 			user_client.sign_up(values)
 
 			# Wait until if found user or not
@@ -196,6 +194,7 @@ def start_app(user_client):
 				pass
 			
 			if user_client.get_user() != False:
+				write_key_pair(values, private_key, public_key)
 				window.close()
 				window = sg.Window("Silent Message",
 									friends_list(user_client.get_user()),
