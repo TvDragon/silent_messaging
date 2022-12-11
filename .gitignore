@@ -3,3 +3,4 @@ env/
 lqueries.log
 users.json
 client/*.pem
+client/*.json

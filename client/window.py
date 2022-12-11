@@ -60,7 +60,8 @@ def message_scene(user, dm_person):
 	# Find dm_person and loop through messages with them
 
 	return [[sg.Column(recent_dms, size=(200, MESSAGE_SCREEN_HEIGHT)),
-			sg.Column(message, size=(MESSAGE_SCREEN_WIDTH - 200,
+			sg.Column(message, scrollable=True, vertical_scroll_only=True,
+						size=(MESSAGE_SCREEN_WIDTH - 200,
 										MESSAGE_SCREEN_HEIGHT))]]
 
 def add_friend_scene(user):
