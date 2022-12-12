@@ -2,7 +2,7 @@ import socket
 import threading
 
 from events_handler import perform_task, log_connection_to_server, \
-	log_disconnection_to_server, remove_ip_for_user
+	log_disconnection_to_server, remove_ip_for_user, open_messages
 
 class Server:
 
@@ -53,6 +53,8 @@ class Server:
 				break
 
 	def run(self):
+		open_messages()
+
 		# Handle connections
 		while True:
 

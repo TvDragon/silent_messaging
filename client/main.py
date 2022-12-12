@@ -1,5 +1,5 @@
 from client import Client
-from window import *
+from window import start_app
 
 def main():
 	user_client = Client()

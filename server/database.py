@@ -9,12 +9,10 @@ path = getcwd()
 users_filename = "{}/users.json".format(path)
 lock = Lock()
 
-def write_messages():
+def create_messages_file():
 	lock.acquire()
-	messages_filename = "{}/messages".format(path)
-	if exists(messages_filename):
-		pass
-	else:
+	messages_filename = "{}/messages.json".format(path)
+	if not exists(messages_filename):
 		f = open(messages_filename, "w")
 		f.close()
 

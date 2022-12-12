@@ -2,7 +2,8 @@ import PySimpleGUI as sg
 from hashlib import sha256
 from datetime import datetime
 
-from database import write_to_db, get_users, update_db, write_log_connection
+from database import write_to_db, get_users, update_db, write_log_connection, \
+	create_messages_file
 
 def log_connection_to_server(addr):
 	msg = "Time: {} - {}:{} connected".format(datetime.now(),
@@ -166,3 +167,6 @@ def remove_ip_for_user(addr):
 			user["public_ip"] = ""
 			update_db(user)
 			break
+
+def open_messages():
+	create_messages_file()
