@@ -1,17 +1,27 @@
 {
 	"TvDragon": [
 		{
-			"JFrazer": [
-				"Hello, my name is JFrazer.-:-JFrazer",
-                "Hi JFrazer, my name is TvDragon.-:-TvDragon"
+			"username": "JFrazer",
+			"messages": [
+				{
+                    "JFrazer": "Hello, my name is JFrazer."
+                },
+                {
+                    "TvDragon": "Hi JFrazer, my name is TvDragon."
+                }
 			]
 		}
 	],
 	"JFrazer": [
 		{
-			"TvDragon": [
-				"Hello, my name is JFrazer.-:-JFrazer",
-                "Hi JFrazer, my name is TvDragon.-:-TvDragon"
+			"username": "TvDragon",
+			"messages": [
+				{
+                    "JFrazer": "Hello, my name is JFrazer."
+                },
+                {
+                    "TvDragon": "Hi JFrazer, my name is TvDragon."
+                }
 			]
 		}
 	]

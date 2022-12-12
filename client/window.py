@@ -1,6 +1,6 @@
 import PySimpleGUI as sg
-from controller import handle_events, start_up
-from view import WIDTH, HEIGHT
+from event_handler import handle_events, start_up
+from scenes import WIDTH, HEIGHT
 
 def start_app(user_client):
 

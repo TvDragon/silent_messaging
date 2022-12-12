@@ -1,6 +1,6 @@
-from view import *
+from scenes import *
 from client import Client
-from model import create_msg_file, generate_key_pair, write_key_pair
+from model import create_msg_file, generate_key_pair, write_key_pair, get_messages
 
 def handle_events(event, values, user_client, window):
 	# See if user wants to quit or window was closed
@@ -98,9 +98,10 @@ def handle_events(event, values, user_client, window):
 		for friend in user_client.get_user()["friends"]:
 			if event == "-{}-".format(friend):
 				window.close()
+				messages = get_messages(user_client.get_user(), friend)
 				window = sg.Window("Silent Message",
 									message_scene(user_client.get_user(),
-													friend),
+													friend, messages),
 									element_justification='c',
 									size=(MESSAGE_SCREEN_WIDTH,
 											MESSAGE_SCREEN_HEIGHT))

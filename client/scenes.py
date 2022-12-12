@@ -46,9 +46,11 @@ def recent_messages(user):
 
 	return recent_dms
 
-def message_scene(user, dm_person):
+def message_scene(user, dm_person, messages):
 	
 	recent_dms = recent_messages(user)
+
+	print(messages)
 
 	message = [[sg.Text("{}".format(dm_person), font=("Arial", 20))],
 				[sg.Text("Message....", font=("Arial", 14))],
