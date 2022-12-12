@@ -1,7 +1,8 @@
 import socket
 import threading
 
-from events_handler import perform_task, log_connection_to_server, log_disconnection_to_server
+from events_handler import perform_task, log_connection_to_server, \
+	log_disconnection_to_server, remove_ip_for_user
 
 class Server:
 
@@ -22,27 +23,31 @@ class Server:
 		while True:
 			data = conn.recv(1024)	# Max amount of data we can receive is 1024 bytes
 			# recv() is a blocking function so loop won't run until we actually receive some data
-			success, user = perform_task(data, addr)
-			msg = ""
-			if user != None and success == 100:
-				msg = "Sign In::{}".format(str(user))
-			elif user == None:
-				msg = "Sign In::Error"
-			elif user == False:
-				msg = "Sign Up::Error"
-			elif success == 500:
-				values = {"-SUCCESS_CODE-": success}
-				values.update(CURR_USER = user)
-				msg = "Respond Friend Request::{}".format(values)
-			elif user != None:
-				values = {"-SUCCESS_CODE-": success}
-				values.update(CURR_USER = user)
-				msg = "Send Friend Request::{}".format(values)
-			
-			conn.send(bytes(msg, 'utf-8'))	# Send into back to user
+			try:
+				success, user = perform_task(data, addr)
+				msg = ""
+				if user != None and success == 100:
+					msg = "Sign In::{}".format(str(user))
+				elif user == None:
+					msg = "Sign In::Error"
+				elif user == False:
+					msg = "Sign Up::Error"
+				elif success == 500:
+					values = {"-SUCCESS_CODE-": success}
+					values.update(CURR_USER = user)
+					msg = "Respond Friend Request::{}".format(values)
+				elif user != None:
+					values = {"-SUCCESS_CODE-": success}
+					values.update(CURR_USER = user)
+					msg = "Send Friend Request::{}".format(values)
+				
+				conn.send(bytes(msg, 'utf-8'))	# Send into back to user
+			except TypeError:
+				print("TypeError received")
 
 			if not data:
 				log_disconnection_to_server(addr)
+				remove_ip_for_user(addr)
 				self.connections.remove(conn)	# Remove connection from list of connections
 				conn.close() # Close connection
 				break

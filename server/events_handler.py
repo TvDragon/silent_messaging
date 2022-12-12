@@ -156,3 +156,13 @@ def perform_task(msg, addr):
 			pass
 	except ValueError:
 		print("Perform Task Error")
+
+def remove_ip_for_user(addr):
+	users = get_users()
+	public_addr = "{}:{}".format(addr[0], addr[1])
+
+	for user in users:
+		if user["public_ip"] == public_addr:
+			user["public_ip"] = ""
+			update_db(user)
+			break
