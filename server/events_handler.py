@@ -23,6 +23,7 @@ def add_user(values):
 		"hashed password": hashed_password,
 		"email": values["-EMAIL-"],
 		"public key": str(values["PUBLIC_KEY"]),	# Will need to convert this back to bytes when encrypting messages
+		"public_ip": "",
 		"friends": [],
 		"recent_dms": [],
 		"pending": []
@@ -120,7 +121,7 @@ def respond_friend_request(values):
 
 	return 500, curr_user
 
-def perform_task(msg):
+def perform_task(msg, addr):
 
 	msg = msg.decode('utf8')
 
@@ -131,6 +132,9 @@ def perform_task(msg):
 			values = eval(details)
 			found_user, user = find_user(values)
 			if found_user:
+				public_addr = "{}:{}".format(addr[0], addr[1])
+				user.update(public_ip = public_addr)
+				update_db(user)
 				return 100, user
 			return 1, None
 		elif task == "Sign Up":

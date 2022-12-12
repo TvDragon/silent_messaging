@@ -6,13 +6,24 @@ from os import getcwd
 from log_queries import write_to_log
 
 path = getcwd()
-filename = "{}/users.json".format(path)
+users_filename = "{}/users.json".format(path)
 lock = Lock()
+
+def write_messages():
+	lock.acquire()
+	messages_filename = "{}/messages".format(path)
+	if exists(messages_filename):
+		pass
+	else:
+		f = open(messages_filename, "w")
+		f.close()
+
+	lock.release()
 
 def get_users():
 	lock.acquire()				# Lock file for no modifications can be made when reading file
-	if exists(filename):
-		f = open(filename, "r")
+	if exists(users_filename):
+		f = open(users_filename, "r")
 		users = json.load(f)
 		f.close()
 	else:
@@ -31,7 +42,7 @@ def update_db(curr_user):
 		i += 1
 
 	lock.acquire()				# Lock file for writing so multiple threads cannot write to same file
-	f = open(filename, "w")
+	f = open(users_filename, "w")
 	users = json.dumps(users, indent=4)
 	f.write(users)
 	f.close()
@@ -54,7 +65,7 @@ def write_to_db(new_user):
 	if not username_taken:
 		users.append(new_user)
 		lock.acquire()				# Lock file for writing so multiple threads cannot write to same file
-		f = open(filename, "w")
+		f = open(users_filename, "w")
 		users = json.dumps(users, indent=4)
 		f.write(users)
 		f.close()
