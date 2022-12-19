@@ -98,7 +98,7 @@ def handle_events(event, values, user_client, window):
 		for friend in user_client.get_user()["friends"]:
 			if event == "-{}-".format(friend):
 				window.close()
-				messages = get_messages(user_client.get_user(), friend)
+				messages = get_messages(user_client.get_user(), friend)["messages"]
 				window = sg.Window("Silent Message",
 									message_scene(user_client.get_user(),
 													friend, messages),

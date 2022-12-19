@@ -1,4 +1,5 @@
 import PySimpleGUI as sg
+import textwrap
 
 WIDTH = 512
 HEIGHT = 240
@@ -48,21 +49,41 @@ def recent_messages(user):
 
 def message_scene(user, dm_person, messages):
 	
+	wrapper = textwrap.TextWrapper(width=120,
+									max_lines=100, placeholder=' ...')
+
 	recent_dms = recent_messages(user)
 
-	print(messages)
+	message = [[sg.Text("{}".format(dm_person), font=("Arial", 20))]]
 
-	message = [[sg.Text("{}".format(dm_person), font=("Arial", 20))],
-				[sg.Text("Message....", font=("Arial", 14))],
-				[sg.Text("Message 2.....", font=("Arial", 14))],
-				[sg.Text("Message 3.....", font=("Arial", 14))]]
+	for msg in messages:
+		for key in msg.keys():
+			text = "{}\t\tFrom {}".format(msg[key], key)
+		new_text = '\n'.join(wrapper.wrap(text))
+		message.append([sg.Text("{}".format(new_text), font=("Arial", 14))])
 
-	# Find dm_person and loop through messages with them
+	col1 = sg.Column(recent_dms, size=(200, MESSAGE_SCREEN_HEIGHT))
 
-	return [[sg.Column(recent_dms, size=(200, MESSAGE_SCREEN_HEIGHT)),
-			sg.Column(message, scrollable=True, vertical_scroll_only=True,
-						size=(MESSAGE_SCREEN_WIDTH - 200,
-										MESSAGE_SCREEN_HEIGHT))]]
+	col2 = sg.Column(message, scrollable=True, vertical_scroll_only=True,
+						size=(MESSAGE_SCREEN_WIDTH - 275,
+						MESSAGE_SCREEN_HEIGHT - 200),
+						vertical_alignment="top")
+										
+	col3 = sg.Column([[sg.Multiline(key="-MESSAGE-",
+						size=(MESSAGE_SCREEN_WIDTH - 260, 100),
+						text_color="white", enter_submits=True,
+						do_not_clear=False)]],
+					size=(MESSAGE_SCREEN_WIDTH - 260, 100))
+
+	col4 = sg.Column([
+				# Information sg.Frame
+				[sg.Frame('Messages:', [[col2]])],
+				# Categories sg.Frame
+				[sg.Frame('User Input:',[[col3]])]],
+			size=(MESSAGE_SCREEN_WIDTH - 200, MESSAGE_SCREEN_HEIGHT))
+
+	return [[col1,
+			col4]]
 
 def add_friend_scene(user):
 	
