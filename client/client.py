@@ -8,26 +8,37 @@ class Client:
 	user = None
 	port = 10000
 	success_code = None
+	dm_person = None
 
 	def send_msg(self, msg):
 		self.sock.send(bytes(msg, 'utf-8'))
 
 	def sign_in(self, values):	# Send message to Server
-		msg = "Sign In::{}".format(values)
+		values.update(TASK = "Sign In")
+		msg = "{}".format(values)
 		self.send_msg(msg)
 
 	def sign_up(self, values):
-		msg = "Sign Up::{}".format(values)
+		values.update(TASK = "Sign Up")
+		msg = "{}".format(values)
 		self.send_msg(msg)
 
 	def send_friend_request(self, values):
 		values.update(CURR_USER = self.user)
-		msg = "Send Friend Request::{}".format(values)
+		values.update(TASK = "Send Friend Request")
+		msg = "{}".format(values)
 		self.send_msg(msg)
 	
 	def respond_friend_request(self, values):
 		values.update(CURR_USER = self.user)
-		msg = "Respond Friend Request::{}".format(values)
+		values.update(TASK = "Respond Friend Request")
+		msg = "{}".format(values)
+		self.send_msg(msg)
+
+	def message_person(self, values):
+		values.update(DM_PERSON = self.dm_person)
+		values.update(TASK = "Message User")
+		msg = "{}".format(values)
 		self.send_msg(msg)
 
 	def receive_data_loop(self):
@@ -83,3 +94,6 @@ class Client:
 
 	def get_success_code(self):
 		return self.success_code
+
+	def set_dm_person(self, dm_person):
+		self.dm_person = dm_person

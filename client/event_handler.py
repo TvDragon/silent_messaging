@@ -6,6 +6,8 @@ def handle_events(event, values, user_client, window):
 	# See if user wants to quit or window was closed
 	if event == sg.WINDOW_CLOSED:
 		return window, 1
+	elif event == "SEND":
+		user_client.message_person(values)
 	elif event == "Sign In":
 		user_client.sign_in(values)
 
@@ -98,7 +100,10 @@ def handle_events(event, values, user_client, window):
 		for friend in user_client.get_user()["friends"]:
 			if event == "-{}-".format(friend):
 				window.close()
-				messages = get_messages(user_client.get_user(), friend)["messages"]
+				messages = get_messages(user_client.get_user(), friend)
+				if messages != None:
+					messages = messages["messages"]
+				user_client.set_dm_person(friend)
 				window = sg.Window("Silent Message",
 									message_scene(user_client.get_user(),
 													friend, messages),

@@ -55,12 +55,12 @@ def message_scene(user, dm_person, messages):
 	recent_dms = recent_messages(user)
 
 	message = [[sg.Text("{}".format(dm_person), font=("Arial", 20))]]
-
-	for msg in messages:
-		for key in msg.keys():
-			text = "{}\t\tFrom {}".format(msg[key], key)
-		new_text = '\n'.join(wrapper.wrap(text))
-		message.append([sg.Text("{}".format(new_text), font=("Arial", 14))])
+	if messages != None:
+		for msg in messages:
+			for key in msg.keys():
+				text = "{}\t\tFrom {}".format(msg[key], key)
+			new_text = '\n'.join(wrapper.wrap(text))
+			message.append([sg.Text("{}".format(new_text), font=("Arial", 14))])
 
 	col1 = sg.Column(recent_dms, size=(200, MESSAGE_SCREEN_HEIGHT))
 
@@ -70,9 +70,12 @@ def message_scene(user, dm_person, messages):
 						vertical_alignment="top")
 										
 	col3 = sg.Column([[sg.Multiline(key="-MESSAGE-",
-						size=(MESSAGE_SCREEN_WIDTH - 260, 100),
-						text_color="white", enter_submits=True,
-						do_not_clear=False)]],
+							size=(MESSAGE_SCREEN_WIDTH - 300, 100),
+							text_color="white", enter_submits=True,
+							do_not_clear=False),
+						sg.Button('SEND', \
+							button_color=(sg.YELLOWS[0], sg.BLUES[0]), \
+							bind_return_key=True)]],
 					size=(MESSAGE_SCREEN_WIDTH - 260, 100))
 
 	col4 = sg.Column([

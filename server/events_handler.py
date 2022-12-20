@@ -127,10 +127,12 @@ def perform_task(msg, addr):
 	msg = msg.decode('utf8')
 
 	try:
-		task, details = msg.split("::")
-		print(task)
-		if task == "Sign In":
-			values = eval(details)
+		values = eval(msg)
+		task = values["TASK"]
+		values.pop("TASK")
+		if task == "Message User":
+			print(values)
+		elif task == "Sign In":
 			found_user, user = find_user(values)
 			if found_user:
 				public_addr = "{}:{}".format(addr[0], addr[1])
@@ -139,7 +141,6 @@ def perform_task(msg, addr):
 				return 100, user
 			return 1, None
 		elif task == "Sign Up":
-			values = eval(details)
 			username_taken, new_user = add_user(values)
 			if not username_taken:
 				return 100, new_user
@@ -147,16 +148,16 @@ def perform_task(msg, addr):
 		elif task == "Add Friend":
 			pass
 		elif task == "Send Friend Request":
-			values = eval(details)
 			success, user = add_friend(values)
 			return success, user
 		elif task == "Respond Friend Request":
-			values = eval(details)
 			return respond_friend_request(values)
 		elif task == "Forgot Password":
 			pass
 	except ValueError:
 		print("Perform Task Error")
+	except SyntaxError:
+		print("Syntax Error Occurred")
 
 def remove_ip_for_user(addr):
 	users = get_users()
