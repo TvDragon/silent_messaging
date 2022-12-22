@@ -37,6 +37,7 @@ class Client:
 
 	def message_person(self, values):
 		values.update(DM_PERSON = self.dm_person)
+		values.update(USERNAME = (self.user)["username"])
 		values.update(TASK = "Message User")
 		msg = "{}".format(values)
 		self.send_msg(msg)
@@ -52,7 +53,9 @@ class Client:
 			try:
 				task, details = data.split("::")
 
-				if task == "Sign In":
+				if task == "Message":
+					print(details)
+				elif task == "Sign In":
 					if details != "Error":
 						values = eval(details)
 						self.user = values

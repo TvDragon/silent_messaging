@@ -24,21 +24,25 @@ class Server:
 			data = conn.recv(1024)	# Max amount of data we can receive is 1024 bytes
 			# recv() is a blocking function so loop won't run until we actually receive some data
 			try:
-				success, user = perform_task(data, addr)
+				success, data = perform_task(data, addr, self.connections)
 				msg = ""
-				if user != None and success == 100:
-					msg = "Sign In::{}".format(str(user))
-				elif user == None:
+				if success == 0:
+					msg = "Message::{}".format(str(data[1]))
+					data[0].send(bytes(msg, 'utf-8'))
+					msg = ""
+				elif data != None and success == 100:
+					msg = "Sign In::{}".format(str(data))
+				elif data == None:
 					msg = "Sign In::Error"
-				elif user == False:
+				elif data == False:
 					msg = "Sign Up::Error"
 				elif success == 500:
 					values = {"-SUCCESS_CODE-": success}
-					values.update(CURR_USER = user)
+					values.update(CURR_USER = data)
 					msg = "Respond Friend Request::{}".format(values)
-				elif user != None:
+				elif data != None:
 					values = {"-SUCCESS_CODE-": success}
-					values.update(CURR_USER = user)
+					values.update(CURR_USER = data)
 					msg = "Send Friend Request::{}".format(values)
 				
 				conn.send(bytes(msg, 'utf-8'))	# Send into back to user

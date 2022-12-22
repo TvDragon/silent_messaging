@@ -122,7 +122,25 @@ def respond_friend_request(values):
 
 	return 500, curr_user
 
-def perform_task(msg, addr):
+def send_msg_to_user(values, connections):
+	username = values["USERNAME"]
+	dm_person = values["DM_PERSON"]
+	message = values["-MESSAGE-"]
+
+	users = get_users()
+
+	for user in users:
+		if dm_person == user["username"]:
+			public_ip = user["public_ip"]
+
+			for conn in connections:
+				ip = "{}:{}".format(conn.getpeername()[0], conn.getpeername()[1])
+				if ip == public_ip:
+					return 0, [conn, values]
+
+	return 500, None
+
+def perform_task(msg, addr, connections):
 
 	msg = msg.decode('utf8')
 
@@ -131,7 +149,9 @@ def perform_task(msg, addr):
 		task = values["TASK"]
 		values.pop("TASK")
 		if task == "Message User":
-			print(values)
+			success, data = send_msg_to_user(values, connections)
+			# Check if not connected then write that message to database
+			return success, data
 		elif task == "Sign In":
 			found_user, user = find_user(values)
 			if found_user:
