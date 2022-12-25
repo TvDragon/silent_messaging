@@ -1,12 +1,14 @@
 from scenes import *
-from client import Client
-from model import create_msg_file, generate_key_pair, write_key_pair, get_messages
+from db_handler import create_msg_file, generate_key_pair, write_key_pair, get_messages, write_message
 
 def handle_events(event, values, user_client, window):
 	# See if user wants to quit or window was closed
 	if event == sg.WINDOW_CLOSED:
 		return window, 1
 	elif event == "SEND":
+		write_message(values["-MESSAGE-"], user_client.get_user()["username"],
+						user_client.get_dm_person(),
+						user_client.get_user()["username"])
 		user_client.message_person(values)
 	elif event == "Sign In":
 		user_client.sign_in(values)
@@ -164,3 +166,12 @@ def handle_events(event, values, user_client, window):
 def start_up():
 	# Retrieve Window's Content
 	return login_scene()
+
+def handle_client_tasks(values):
+	print(values)
+	values = eval(values)
+	message = values["-MESSAGE-"]
+	dm_person = values["DM_PERSON"]
+	username = values["USERNAME"]
+
+	write_message(message, dm_person, username, username)

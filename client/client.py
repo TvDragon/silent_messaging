@@ -1,5 +1,6 @@
 import socket
 import threading
+from event_handler import handle_client_tasks
 
 class Client:
 	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -54,7 +55,7 @@ class Client:
 				task, details = data.split("::")
 
 				if task == "Message":
-					print(details)
+					handle_client_tasks(details)
 				elif task == "Sign In":
 					if details != "Error":
 						values = eval(details)
@@ -100,3 +101,6 @@ class Client:
 
 	def set_dm_person(self, dm_person):
 		self.dm_person = dm_person
+
+	def get_dm_person(self):
+		return self.dm_person

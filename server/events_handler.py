@@ -138,7 +138,7 @@ def send_msg_to_user(values, connections):
 				if ip == public_ip:
 					return 0, [conn, values]
 
-	return 500, None
+	return -1, None
 
 def perform_task(msg, addr, connections):
 
