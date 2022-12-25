@@ -26,13 +26,13 @@ class Server:
 			try:
 				success, data = perform_task(data, addr, self.connections)
 				msg = ""
-				if success == 0:
+				if success == 200:
 					msg = "Message::{}".format(str(data[1]))
 					data[0].send(bytes(msg, 'utf-8'))
 					msg = ""
 				elif data != None and success == 100:
 					msg = "Sign In::{}".format(str(data))
-				elif data == None:
+				elif data == None and success == 1:
 					msg = "Sign In::Error"
 				elif data == False:
 					msg = "Sign Up::Error"
