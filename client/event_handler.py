@@ -207,10 +207,18 @@ def start_up():
 	# Retrieve Window's Content
 	return login_scene()
 
-def handle_client_tasks(values):
+def receive_message(values):
 	values = eval(values)
 	message = values["-MESSAGE-"]
 	dm_person = values["DM_PERSON"]
 	username = values["USERNAME"]
 
 	write_message(message, dm_person, username, username)
+
+def downloaded_message(values):
+	messages = values["MESSAGE"]
+	values.pop("MESSAGE")
+
+	print(messages)
+
+	return values

@@ -1,6 +1,6 @@
 import socket
 import threading
-from event_handler import handle_client_tasks
+from event_handler import receive_message, downloaded_message
 
 class Client:
 	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -55,10 +55,11 @@ class Client:
 				task, details = data.split("::")
 
 				if task == "Message":
-					handle_client_tasks(details)
+					receive_message(details)
 				elif task == "Sign In":
 					if details != "Error":
 						values = eval(details)
+						values = downloaded_message(values)
 						self.user = values
 					else:
 						self.user = False

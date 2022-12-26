@@ -1,17 +1,13 @@
 [
     {
-        "username": "TvDragon",
-        "messages": [
-            {
-                "JFrazer": "hello"
-            }
-        ]
-    },
-    {
         "username": "JFrazer",
         "messages": [
             {
-                "TvDragon": "testing"
+                "sender": "TvDragon",
+                "messages": [
+                    "This is a test",
+                    "Should update online databse"
+                ]
             }
         ]
     }

@@ -100,7 +100,7 @@ def get_messages(receiver):
 	lock_messages.release()
 	return messages
 
-def write_messages(message, receiver):
+def write_messages(message, sender, receiver):
 	lock_messages.acquire()
 
 	f = open(messages_filename, "r")
@@ -111,7 +111,11 @@ def write_messages(message, receiver):
 	for block in all_messages:
 		if block["username"] == receiver:
 			messages = block["messages"]
-			messages.append(message)
+			for msg in messages:
+				if msg["sender"] == sender:
+					msgs = msg["messages"]
+					msgs.append(message)
+					msg["messages"] = msgs
 			block["messages"] = messages
 			found_user = True
 			break
@@ -119,7 +123,10 @@ def write_messages(message, receiver):
 	if not found_user:
 		block = {
 			"username": "{}".format(receiver),
-			"messages": [message]
+			"messages": [{
+				"sender": "{}".format(sender),
+				"messages": [message]
+			}]
 		}
 		all_messages.append(block)
 

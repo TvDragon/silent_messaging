@@ -142,10 +142,9 @@ def send_msg_to_user(values, connections):
 def store_message_to_db(values):
 	sender = values["USERNAME"]
 	receiver = values["DM_PERSON"]
-	msg = values["-MESSAGE-"]
-
-	message = {"{}".format(sender): "{}".format(msg)}
-	write_messages(message, receiver)
+	message = values["-MESSAGE-"]
+	
+	write_messages(message, sender, receiver)
 
 def perform_task(msg, addr, connections):
 
@@ -169,12 +168,13 @@ def perform_task(msg, addr, connections):
 				user.update(public_ip = public_addr)
 				update_db(user)
 				messages = get_messages(user["username"])
-				print(messages)
+				user.update(MESSAGE = messages)
 				return 100, user
 			return 1, None
 		elif task == "Sign Up":
 			username_taken, new_user = add_user(values)
 			if not username_taken:
+				new_user.update(MESSAGE = None)
 				return 100, new_user
 			return 1, False
 		elif task == "Add Friend":
