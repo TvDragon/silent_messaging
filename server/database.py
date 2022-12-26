@@ -7,19 +7,20 @@ from log_queries import write_to_log
 
 path = getcwd()
 users_filename = "{}/users.json".format(path)
-lock = Lock()
+messages_filename = "{}/messages.json".format(path)
+lock_users = Lock()
+lock_messages = Lock()
 
 def create_messages_file():
-	lock.acquire()
-	messages_filename = "{}/messages.json".format(path)
+	lock_messages.acquire()
 	if not exists(messages_filename):
 		f = open(messages_filename, "w")
 		f.close()
 
-	lock.release()
+	lock_messages.release()
 
 def get_users():
-	lock.acquire()				# Lock file for no modifications can be made when reading file
+	lock_users.acquire()				# Lock file for no modifications can be made when reading file
 	if exists(users_filename):
 		f = open(users_filename, "r")
 		users = json.load(f)
@@ -27,7 +28,7 @@ def get_users():
 	else:
 		users = []
 
-	lock.release()				# Release lock so other threads can access file
+	lock_users.release()				# Release lock_users so other threads can access file
 	return users
 
 def update_db(curr_user):
@@ -39,7 +40,7 @@ def update_db(curr_user):
 			users[i] = curr_user
 		i += 1
 
-	lock.acquire()				# Lock file for writing so multiple threads cannot write to same file
+	lock_users.acquire()				# Lock file for writing so multiple threads cannot write to same file
 	f = open(users_filename, "w")
 	users = json.dumps(users, indent=4)
 	f.write(users)
@@ -48,7 +49,7 @@ def update_db(curr_user):
 	text = "Time: {} - Updated User Details: {}".format(current_time,
 														curr_user["username"])
 	write_to_log(text)
-	lock.release()				# Release lock so other threads can write to file
+	lock_users.release()				# Release lock_users so other threads can write to file
 	
 
 def write_to_db(new_user):
@@ -62,7 +63,7 @@ def write_to_db(new_user):
 
 	if not username_taken:
 		users.append(new_user)
-		lock.acquire()				# Lock file for writing so multiple threads cannot write to same file
+		lock_users.acquire()				# Lock file for writing so multiple threads cannot write to same file
 		f = open(users_filename, "w")
 		users = json.dumps(users, indent=4)
 		f.write(users)
@@ -71,11 +72,40 @@ def write_to_db(new_user):
 		text = "Time: {} - New User Added: {}".format(current_time,
 														new_user["username"])
 		write_to_log(text)
-		lock.release()				# Release lock so other threads can write to file
+		lock_users.release()				# Release lock_users so other threads can write to file
 
 	return username_taken
 
+def write_messages(message, receiver):
+	lock_messages.acquire()
+
+	f = open(messages_filename, "r")
+	all_messages = json.load(f)
+	f.close()
+	found_user = False
+
+	for block in all_messages:
+		if block["username"] == receiver:
+			messages = block["messages"]
+			messages.append(message)
+			block["messages"] = messages
+			found_user = True
+			break
+
+	if not found_user:
+		block = {
+			"username": "{}".format(receiver),
+			"messages": [message]
+		}
+		all_messages.append(block)
+
+	f = open(messages_filename, "w")
+	all_messages = json.dumps(all_messages, indent=4)
+	f.write(all_messages)
+	f.close()
+	lock_messages.release()
+
 def write_log_connection(msg):
-	lock.acquire()
+	lock_users.acquire()
 	write_to_log(msg)
-	lock.release()
+	lock_users.release()

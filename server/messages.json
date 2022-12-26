@@ -1,28 +1,18 @@
-{
-	"TvDragon": [
-		{
-			"username": "JFrazer",
-			"messages": [
-				{
-                    "JFrazer": "Hello, my name is JFrazer."
-                },
-                {
-                    "TvDragon": "Hi JFrazer, my name is TvDragon."
-                }
-			]
-		}
-	],
-	"JFrazer": [
-		{
-			"username": "TvDragon",
-			"messages": [
-				{
-                    "JFrazer": "Hello, my name is JFrazer."
-                },
-                {
-                    "TvDragon": "Hi JFrazer, my name is TvDragon."
-                }
-			]
-		}
-	]
-}
+[
+    {
+        "username": "TvDragon",
+        "messages": [
+            {
+                "JFrazer": "hello"
+            }
+        ]
+    },
+    {
+        "username": "JFrazer",
+        "messages": [
+            {
+                "TvDragon": "testing"
+            }
+        ]
+    }
+]

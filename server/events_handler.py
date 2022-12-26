@@ -3,7 +3,7 @@ from hashlib import sha256
 from datetime import datetime
 
 from database import write_to_db, get_users, update_db, write_log_connection, \
-	create_messages_file
+	create_messages_file, write_messages
 
 def log_connection_to_server(addr):
 	msg = "Time: {} - {}:{} connected".format(datetime.now(),
@@ -123,9 +123,7 @@ def respond_friend_request(values):
 	return 500, curr_user
 
 def send_msg_to_user(values, connections):
-	username = values["USERNAME"]
 	dm_person = values["DM_PERSON"]
-	message = values["-MESSAGE-"]
 
 	users = get_users()
 
@@ -138,8 +136,16 @@ def send_msg_to_user(values, connections):
 				if ip == public_ip:
 					return 200, [conn, values]
 
-	print("found no one")
+	# Receiver is not online to receive message
 	return -1, None
+
+def store_message_to_db(values):
+	sender = values["USERNAME"]
+	receiver = values["DM_PERSON"]
+	msg = values["-MESSAGE-"]
+
+	message = {"{}".format(sender): "{}".format(msg)}
+	write_messages(message, receiver)
 
 def perform_task(msg, addr, connections):
 
@@ -151,7 +157,10 @@ def perform_task(msg, addr, connections):
 		values.pop("TASK")
 		if task == "Message User":
 			success, data = send_msg_to_user(values, connections)
-			# Check if not connected then write that message to database
+			
+			if success == -1:	# Write message to database temporarily until receivers logs back on to receive message
+				store_message_to_db(values)
+
 			return success, data
 		elif task == "Sign In":
 			found_user, user = find_user(values)
