@@ -216,9 +216,14 @@ def receive_message(values):
 	write_message(message, dm_person, username, username)
 
 def downloaded_message(values):
-	messages = values["MESSAGE"]
+	all_messages = values["MESSAGE"]
 	values.pop("MESSAGE")
 
-	print(messages)
+	if all_messages is not None:
+		for block in all_messages:
+			sender = block["sender"]
+			messages = block["messages"]
+			for message in messages:
+				write_message(message, values["username"], sender, sender)
 
 	return values
