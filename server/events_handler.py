@@ -143,7 +143,6 @@ def store_message_to_db(values):
 	sender = values["USERNAME"]
 	receiver = values["DM_PERSON"]
 	message = values["-MESSAGE-"]
-	
 	write_messages(message, sender, receiver)
 
 def perform_task(msg, addr, connections):
