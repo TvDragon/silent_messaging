@@ -76,6 +76,30 @@ def write_to_db(new_user):
 
 	return username_taken
 
+def get_messages(receiver):
+	lock_messages.acquire()
+	f = open(messages_filename, "r")
+	all_messages = json.load(f)
+	f.close()
+	messages = None
+
+	i = 0
+	while i < len(all_messages):
+		if all_messages[i]["username"] == receiver:
+			messages = all_messages[i]["messages"]
+			del all_messages[i]
+			break
+
+		i += 1
+
+	f = open(messages_filename, "w")
+	all_messages = json.dumps(all_messages, indent=4)
+	f.write(all_messages)
+	f.close()
+
+	lock_messages.release()
+	return messages
+
 def write_messages(message, receiver):
 	lock_messages.acquire()
 

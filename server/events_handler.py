@@ -3,7 +3,7 @@ from hashlib import sha256
 from datetime import datetime
 
 from database import write_to_db, get_users, update_db, write_log_connection, \
-	create_messages_file, write_messages
+	create_messages_file, write_messages, get_messages
 
 def log_connection_to_server(addr):
 	msg = "Time: {} - {}:{} connected".format(datetime.now(),
@@ -168,6 +168,8 @@ def perform_task(msg, addr, connections):
 				public_addr = "{}:{}".format(addr[0], addr[1])
 				user.update(public_ip = public_addr)
 				update_db(user)
+				messages = get_messages(user["username"])
+				print(messages)
 				return 100, user
 			return 1, None
 		elif task == "Sign Up":
