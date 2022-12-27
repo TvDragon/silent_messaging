@@ -32,31 +32,31 @@ class Server:
 				conn.close() # Close connection
 				break
 
-			try:
-				success, data = perform_task(data, addr, self.connections)
+			# try:
+			success, data = perform_task(data, addr, self.connections)
+			msg = ""
+			if success == 200:
+				msg = "Message::{}".format(str(data[1]))
+				data[0].send(bytes(msg, 'utf-8'))
 				msg = ""
-				if success == 200:
-					msg = "Message::{}".format(str(data[1]))
-					data[0].send(bytes(msg, 'utf-8'))
-					msg = ""
-				elif data != None and success == 100:
-					msg = "Sign In::{}".format(str(data))
-				elif data == None and success == 1:
-					msg = "Sign In::Error"
-				elif data == False:
-					msg = "Sign Up::Error"
-				elif success == 500:
-					values = {"-SUCCESS_CODE-": success}
-					values.update(CURR_USER = data)
-					msg = "Respond Friend Request::{}".format(values)
-				elif data != None:
-					values = {"-SUCCESS_CODE-": success}
-					values.update(CURR_USER = data)
-					msg = "Send Friend Request::{}".format(values)
-				
-				conn.send(bytes(msg, 'utf-8'))	# Send into back to user
-			except TypeError:
-				print("TypeError received")
+			elif data != None and success == 100:
+				msg = "Sign In::{}".format(str(data))
+			elif data == None and success == 1:
+				msg = "Sign In::Error"
+			elif data == False:
+				msg = "Sign Up::Error"
+			elif success == 500:
+				values = {"-SUCCESS_CODE-": success}
+				values.update(CURR_USER = data)
+				msg = "Respond Friend Request::{}".format(values)
+			elif data != None:
+				values = {"-SUCCESS_CODE-": success}
+				values.update(CURR_USER = data)
+				msg = "Send Friend Request::{}".format(values)
+			
+			conn.send(bytes(msg, 'utf-8'))	# Send into back to user
+			# except TypeError:
+			# 	print("TypeError received")
 
 
 	def run(self):
