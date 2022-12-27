@@ -23,6 +23,15 @@ class Server:
 		while True:
 			data = conn.recv(1024)	# Max amount of data we can receive is 1024 bytes
 			# recv() is a blocking function so loop won't run until we actually receive some data
+			
+			# Error occurs here because I'm somehow disconnecting when sending message
+			if not data:
+				log_disconnection_to_server(addr)
+				remove_ip_for_user(addr)
+				self.connections.remove(conn)	# Remove connection from list of connections
+				conn.close() # Close connection
+				break
+
 			try:
 				success, data = perform_task(data, addr, self.connections)
 				msg = ""
@@ -49,12 +58,6 @@ class Server:
 			except TypeError:
 				print("TypeError received")
 
-			if not data:
-				log_disconnection_to_server(addr)
-				remove_ip_for_user(addr)
-				self.connections.remove(conn)	# Remove connection from list of connections
-				conn.close() # Close connection
-				break
 
 	def run(self):
 		open_messages()
