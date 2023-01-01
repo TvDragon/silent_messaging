@@ -86,7 +86,7 @@ def send_friend_request(values, user_client, window):
 def message_user(event, user_client, window):
 	# Loop through names and check if event match against any of the names pressed
 	for friend in user_client.get_user()["friends"]:
-		if event == "-{}-".format(friend):
+		if event == "-{}-".format(friend["username"]):
 			window.close()
 			messages = get_messages(user_client.get_user(), friend)
 			if messages != None:
@@ -109,25 +109,7 @@ def pending_screen(event, user_client, window):
 			
 			# Wait until if sending friend request complete
 			while user_client.get_success_code() == None:
-				window = sg.Window("Silent Message",
-							pending_friends_scene(user_client.get_user()),
-							element_justification='c',
-							size=(MESSAGE_SCREEN_WIDTH,
-									MESSAGE_SCREEN_HEIGHT))
-		elif event == "-X_{}-".format(pending["username"]):
-			values = {"username": pending["username"], "-ACCEPT-": "NO"}
-			user_client.respond_friend_request(values)
-
-			# Wait until if sending friend request complete
-			while user_client.get_success_code() == None:
 				pass
-			
-			window.close()
-			window = sg.Window("Silent Message",
-						pending_friends_scene(user_client.get_user()),
-						element_justification='c',
-						size=(MESSAGE_SCREEN_WIDTH,
-								MESSAGE_SCREEN_HEIGHT))
 
 			window.close()
 			window = sg.Window("Silent Message",

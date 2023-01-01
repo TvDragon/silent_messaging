@@ -62,14 +62,15 @@ def write_to_db(new_user):
 			break
 
 	if not username_taken:
+		f = open("{}_public_key.pem".format(new_user["username"]), "wb")
+		f.write(new_user["public key"].encode("utf-8"))
+		f.close()
+		del new_user["public key"]
 		users.append(new_user)
 		lock_users.acquire()				# Lock file for writing so multiple threads cannot write to same file
 		f = open(users_filename, "w")
 		users = json.dumps(users, indent=4)
 		f.write(users)
-		f.close()
-		f = open("{}_public_key.pem".format(new_user["username"]), "wb")
-		f.write(new_user["public key"].encode("utf-8"))
 		f.close()
 		current_time = datetime.now()
 		text = "Time: {} - New User Added: {}".format(current_time,

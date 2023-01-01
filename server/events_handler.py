@@ -96,12 +96,17 @@ def respond_friend_request(values):
 			pending_ls = curr_user["pending"]
 
 			if response == "YES":
-				friends_ls.append(username)
+				pub_key = get_user_key(username)
+				friend = {"username": username, "public key": pub_key}
+				friends_ls.append(friend)
 				curr_user["friends"] = friends_ls
 				update_db(curr_user)
 
 				friends_ls = user["friends"]
-				friends_ls.append(curr_user["username"])
+				pub_key = get_user_key(curr_user["username"])
+				friend = {"username": curr_user["username"],
+							"public key": pub_key}
+				friends_ls.append(friend)
 				update_db(user)
 
 			new_pending_ls = []
