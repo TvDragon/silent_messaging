@@ -25,3 +25,10 @@ cipher = PKCS1_OAEP.new(key)
 ciphertext = cipher.encrypt(message)
 print(ciphertext)
 print("\n\n")
+
+
+key = RSA.import_key(open('private_key.pem').read())
+cipher = PKCS1_OAEP.new(key)
+decrypted_text = cipher.decrypt(ciphertext).decode("utf-8")
+print(decrypted_text)
+print("\n\n")

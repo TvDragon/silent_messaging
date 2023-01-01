@@ -54,7 +54,7 @@ def get_messages(user, friend):
 	messages = contents["messages"]
 
 	for message in messages:
-		if message["username"] == friend:
+		if message["username"] == friend["username"]:
 			return message
 
 	return None
@@ -70,7 +70,7 @@ def write_message(message, username, dm_person, writer):
 	found_user = False
 	
 	for block in messages:
-		if block["username"] == dm_person:
+		if block["username"] == dm_person["username"]:
 			responses = block["messages"]
 			message = {"{}".format(writer): "{}".format(message)}
 			responses.append(message)
@@ -79,7 +79,11 @@ def write_message(message, username, dm_person, writer):
 	
 	if not found_user:
 		response = {"{}".format(writer): "{}".format(message)}
-		block = {"username": "{}".format(dm_person), "messages": [response]}
+		block = {}
+		try:
+			block = {"username": "{}".format(dm_person["username"]), "messages": [response]}
+		except TypeError:
+			block = {"username": "{}".format(dm_person), "messages": [response]}
 		messages.append(block)
 
 	contents = {"messages": messages}
@@ -88,3 +92,10 @@ def write_message(message, username, dm_person, writer):
 	f.write(contents)
 	f.close()
 	lock.release()
+
+def get_private_key(username):
+	filename = "{}_private_key.pem".format(username)
+	if exists(filename):
+		return open(filename).read()
+
+	return None
