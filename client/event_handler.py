@@ -3,7 +3,6 @@ from db_handler import create_msg_file, generate_key_pair, write_key_pair, \
 				get_messages, write_message, get_private_key
 
 from Crypto.Cipher import PKCS1_OAEP
-from Crypto.PublicKey import RSA
 
 def send(values, user_client, window):
 	write_message(values["-MESSAGE-"], user_client.get_user()["username"],
@@ -202,7 +201,8 @@ def receive_message(values):
 	write_message(message, dm_person, username, username)
 
 def decrypt_message(cipher, message):
-	return cipher.decrypt(bytes(message, "utf-8")).decode("utf-8")
+	message = message[2:-1].encode()
+	return cipher.decrypt(message)
 
 def downloaded_message(values):
 	all_messages = values["MESSAGE"]
@@ -219,8 +219,8 @@ def downloaded_message(values):
 			sender = block["sender"]
 			messages = block["messages"]
 			for message in messages:
-				decrypted_msg = decrypt_message(cipher, message)
-				print(decrypted_msg)
+				# decrypted_msg = decrypt_message(cipher, message)
+				# print(decrypted_msg)
 				write_message(message, values["username"], sender, sender)
 
 	return values

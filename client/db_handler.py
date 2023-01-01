@@ -54,8 +54,12 @@ def get_messages(user, friend):
 	messages = contents["messages"]
 
 	for message in messages:
-		if message["username"] == friend["username"]:
-			return message
+		try:
+			if message["username"] == friend["username"]:
+				return message
+		except TypeError:
+			if message["username"] == friend:
+				return message
 
 	return None
 
@@ -70,12 +74,20 @@ def write_message(message, username, dm_person, writer):
 	found_user = False
 	
 	for block in messages:
-		if block["username"] == dm_person["username"]:
-			responses = block["messages"]
-			message = {"{}".format(writer): "{}".format(message)}
-			responses.append(message)
-			found_user = True
-			break
+		try:
+			if block["username"] == dm_person["username"]:
+				responses = block["messages"]
+				message = {"{}".format(writer): "{}".format(message)}
+				responses.append(message)
+				found_user = True
+				break
+		except TypeError:
+			if block["username"] == dm_person:
+				responses = block["messages"]
+				message = {"{}".format(writer): "{}".format(message)}
+				responses.append(message)
+				found_user = True
+				break
 	
 	if not found_user:
 		response = {"{}".format(writer): "{}".format(message)}
