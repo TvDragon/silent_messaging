@@ -1,7 +1,8 @@
 # Messaging Application
 
 <!-- TABLE OF CONTENTS -->
-**Table of Contents**
+<details>
+  <summary>Table of Contents</summary>
 <ol>
   <li>
     <a href="#about-the-project">About The Project</a>
@@ -18,6 +19,8 @@
   </li>
   <li><a href="#usage">Usage</a></li>
 </ol>
+</details>
+
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
@@ -66,5 +69,5 @@ Originally, this was supposed to be an ecrypted messaging application where the 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
-[python]: https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=Python&logoColor=yellow
+[python]: https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue
 [Python-url]: https://www.python.org/
