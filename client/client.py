@@ -45,7 +45,7 @@ class Client:
 
 	def receive_data_loop(self):
 		while True:	# Main thread is on loop continually waiting to receive data
-			data = self.sock.recv(1024)	# Receive data from server
+			data = self.sock.recv(4096)	# Receive data from server
 
 			if not data:
 				break

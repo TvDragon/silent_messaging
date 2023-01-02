@@ -21,7 +21,7 @@ class Server:
 	def handler(self, conn, addr):	# Accepts arguments
 		# Receive data from connection
 		while True:
-			data = conn.recv(1024)	# Max amount of data we can receive is 1024 bytes
+			data = conn.recv(4096)	# Max amount of data we can receive is 4096 bytes
 			# recv() is a blocking function so loop won't run until we actually receive some data
 			
 			# Error occurs here because I'm somehow disconnecting when sending message
