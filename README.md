@@ -1,4 +1,4 @@
-# Messaging Application
+<h1 align="center">Messaging Application</h1>
 
 <!-- TABLE OF CONTENTS -->
 <details>
