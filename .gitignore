@@ -4,3 +4,4 @@ lqueries.log
 users.json
 client/*.pem
 client/*.json
+server/*.pem

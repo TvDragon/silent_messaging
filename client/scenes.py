@@ -54,7 +54,7 @@ def message_scene(user, dm_person, messages):
 
 	recent_dms = recent_messages(user)
 
-	message = [[sg.Text("{}".format(dm_person["username"]), font=("Arial", 20))]]
+	message = [[sg.Text("{}".format(dm_person), font=("Arial", 20))]]
 	if messages != None:
 		for msg in messages:
 			for key in msg.keys():
@@ -162,8 +162,8 @@ def friends_list(user):
 	friends = user["friends"]
 
 	for friend in friends:
-		friends_ls.append([sg.Text("{}".format(friend["username"]),
-							key="-{}-".format(friend["username"]),
+		friends_ls.append([sg.Text("{}".format(friend),
+							key="-{}-".format(friend),
 							enable_events=True, font=("Arial", 14),
 							text_color="grey")])
 

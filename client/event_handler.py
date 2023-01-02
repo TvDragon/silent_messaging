@@ -1,8 +1,5 @@
 from scenes import *
-from db_handler import create_msg_file, generate_key_pair, write_key_pair, \
-				get_messages, write_message, get_private_key
-
-from Crypto.Cipher import PKCS1_OAEP
+from db_handler import create_msg_file, generate_key_pair, write_key_pair, get_messages, write_message
 
 def send(values, user_client, window):
 	write_message(values["-MESSAGE-"], user_client.get_user()["username"],
@@ -89,9 +86,9 @@ def send_friend_request(values, user_client, window):
 def message_user(event, user_client, window):
 	# Loop through names and check if event match against any of the names pressed
 	for friend in user_client.get_user()["friends"]:
-		if event == "-{}-".format(friend["username"]):
+		if event == "-{}-".format(friend):
 			window.close()
-			messages = get_messages(user_client.get_user(), friend["username"])
+			messages = get_messages(user_client.get_user(), friend)
 			if messages != None:
 				messages = messages["messages"]
 			user_client.set_dm_person(friend)
@@ -112,7 +109,25 @@ def pending_screen(event, user_client, window):
 			
 			# Wait until if sending friend request complete
 			while user_client.get_success_code() == None:
+				window = sg.Window("Silent Message",
+							pending_friends_scene(user_client.get_user()),
+							element_justification='c',
+							size=(MESSAGE_SCREEN_WIDTH,
+									MESSAGE_SCREEN_HEIGHT))
+		elif event == "-X_{}-".format(pending["username"]):
+			values = {"username": pending["username"], "-ACCEPT-": "NO"}
+			user_client.respond_friend_request(values)
+
+			# Wait until if sending friend request complete
+			while user_client.get_success_code() == None:
 				pass
+			
+			window.close()
+			window = sg.Window("Silent Message",
+						pending_friends_scene(user_client.get_user()),
+						element_justification='c',
+						size=(MESSAGE_SCREEN_WIDTH,
+								MESSAGE_SCREEN_HEIGHT))
 
 			window.close()
 			window = sg.Window("Silent Message",
@@ -200,27 +215,15 @@ def receive_message(values):
 
 	write_message(message, dm_person, username, username)
 
-def decrypt_message(cipher, message):
-	message = message[2:-1].encode()
-	return cipher.decrypt(message)
-
 def downloaded_message(values):
 	all_messages = values["MESSAGE"]
 	values.pop("MESSAGE")
-	username = values["username"]
-	private_key = get_private_key(username)
-
-	cipher = PKCS1_OAEP.new(private_key)
-	# ciphertext = str(cipher.encrypt(message.encode("utf-8")))
-	
 
 	if all_messages is not None:
 		for block in all_messages:
 			sender = block["sender"]
 			messages = block["messages"]
 			for message in messages:
-				decrypted_msg = decrypt_message(cipher, message)
-				print(decrypted_msg)
 				write_message(message, values["username"], sender, sender)
 
 	return values

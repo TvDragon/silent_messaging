@@ -1,14 +1,11 @@
-import PySimpleGUI as sg
 from hashlib import sha256
 from datetime import datetime
-<<<<<<< HEAD
 from Crypto.Cipher import PKCS1_OAEP
 from Crypto.PublicKey import RSA
-=======
->>>>>>> parent of ed6075c (trying to figure out how to store encrypted message as they contain double quotation marks)
+import chardet
 
 from database import write_to_db, get_users, update_db, write_log_connection, \
-	create_messages_file, write_messages, get_messages
+	create_messages_file, write_messages, get_messages, get_user_key
 
 def log_connection_to_server(addr):
 	msg = "Time: {} - {}:{} connected".format(datetime.now(),
@@ -22,13 +19,13 @@ def log_disconnection_to_server(addr):
 
 def add_user(values):
 	hashed_password = sha256(values["-PASSWORD-"].encode('utf-8')).hexdigest()
-	# new_user = User(values["-FULL_NAME-"], values["-USERNAME-"],
-	# 				values["-EMAIL-"], hashed_password)
+	public_key = values["PUBLIC_KEY"].decode("utf-8")
+
 	new_user = {
 		"username": values["-USERNAME-"],
 		"hashed password": hashed_password,
 		"email": values["-EMAIL-"],
-		"public key": str(values["PUBLIC_KEY"]),	# Will need to convert this back to bytes when encrypting messages
+		"public key": public_key,	# Will need to convert this back to bytes when encrypting messages
 		"public_ip": "",
 		"friends": [],
 		"recent_dms": [],
@@ -99,17 +96,12 @@ def respond_friend_request(values):
 			pending_ls = curr_user["pending"]
 
 			if response == "YES":
-				pub_key = get_user_key(username)
-				friend = {"username": username, "public key": pub_key}
-				friends_ls.append(friend)
+				friends_ls.append(username)
 				curr_user["friends"] = friends_ls
 				update_db(curr_user)
 
 				friends_ls = user["friends"]
-				pub_key = get_user_key(curr_user["username"])
-				friend = {"username": curr_user["username"],
-							"public key": pub_key}
-				friends_ls.append(friend)
+				friends_ls.append(curr_user["username"])
 				update_db(user)
 
 			new_pending_ls = []
@@ -153,7 +145,20 @@ def store_message_to_db(values):
 	sender = values["USERNAME"]
 	receiver = values["DM_PERSON"]
 	message = values["-MESSAGE-"]
-	write_messages(message, sender, receiver)
+	key = get_user_key(receiver)
+	key = RSA.import_key(key)
+	cipher = PKCS1_OAEP.new(key)
+	ciphertext = str(cipher.encrypt(message.encode("utf-8")))
+
+	# text = ""
+	# for char in ciphertext:
+	# 	if char == '"':
+	# 		text += "\""
+	# 	text += char
+
+	# print(text)
+
+	write_messages(ciphertext, sender, receiver)
 
 def perform_task(msg, addr, connections):
 
@@ -195,8 +200,8 @@ def perform_task(msg, addr, connections):
 			return respond_friend_request(values)
 		elif task == "Forgot Password":
 			pass
-	except ValueError:
-		print("Perform Task Error")
+	# except ValueError:
+	# 	print("Perform Task Error")
 	except SyntaxError:
 		print("Syntax Error Occurred")
 
