@@ -1,4 +1,4 @@
-<h1 align="center">Messaging Application</h1>
+<h1 align="center">Silent Messaging</h1>
 
 <!-- TABLE OF CONTENTS -->
 <details>
