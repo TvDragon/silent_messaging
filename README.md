@@ -26,21 +26,37 @@ Originally, this was supposed to be an ecrypted messaging application where the 
 
 ### Build With
 
-* [![Flutter][python]][Python-url]
+* [![Python][python]][Python-url]
 
 <!-- GETTING STARTED -->
 ## Getting Started
 
 ### Prerequisites
 
-You will be required to install the minimum requirements for flutter and setup your emulator to work correctly. Follow the steps on the official flutter [website](https://docs.flutter.dev/get-started/install).
-
 ### Installation
 
 1. Clone this repository to your desired location using git or download the zip file and extract it.
 
+2. You will be required to have python install and the following python library dependencies listed below. Follow the steps to install python from this [website](https://realpython.com/installing-python/). You'll need to set up a virtual environment as well which you can follow from the virtualenv dependency.
+
+	* [virtualenv](https://www.freecodecamp.org/news/how-to-setup-virtual-environments-in-python/)
+	* [PySimpleGUI](https://pypi.org/project/PySimpleGUI/)
+
 <!-- USAGE EXAMPLES -->
 ## Usage
+
+1. Once you have performed the installation listed in the previous steps. Open up a terminal or command prompt and enter the command below to enter your virtual environment. The name of your folder like "env" will be what you named it when setting up the virtual environment.
+
+	source env/bin/activate
+
+2. There will be a server and client version in their respective folders. The server version handles client connections and the client is the user. If you wish to run the server and/or client version run the commands below respectively.
+
+	python server/server.py
+	python client/main.py
+
+3. If you wish to deactive your virtual environment run the command below.
+
+	deactivate
 
 <!-- Example -->
 ## Application Demonstration
@@ -52,13 +68,3 @@ You will be required to install the minimum requirements for flutter and setup y
 
 [python]: https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=Python&logoColor=yellow
 [Python-url]: https://www.python.org/
-
-
-Coding:
-
-1. Activate environment
-
-	source env/bin/activate
-
-2. Deactivate environment
-	deactivate
