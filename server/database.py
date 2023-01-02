@@ -104,13 +104,6 @@ def get_messages(receiver):
 	lock_messages.release()
 	return messages
 
-def get_user_key(receiver):
-	filename = "{}_public_key.pem".format(receiver)
-	if exists(filename):
-		return open(filename).read()
-
-	return None
-
 def write_messages(message, sender, receiver):
 	lock_messages.acquire()
 
