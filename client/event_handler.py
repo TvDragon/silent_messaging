@@ -189,7 +189,6 @@ def start_up():
 	return login_scene()
 
 def receive_message(values):
-	values = eval(values)
 	message = values["-MESSAGE-"]
 	dm_person = values["DM_PERSON"]
 	username = values["USERNAME"]

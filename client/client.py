@@ -52,29 +52,30 @@ class Client:
 
 			data = data.decode('utf-8')
 			try:
-				task, details = data.split("::")
 
+				values = eval(data)
+				task = values["TASK"]
+				values.pop("TASK")
 				if task == "Message":
+					details = values["Details"]
 					receive_message(details)
 				elif task == "Sign In":
+					details = values["Details"]
 					if details != "Error":
-						values = eval(details)
-						values = downloaded_message(values)
-						self.user = values
+						details = downloaded_message(details)
+						self.user = details
 					else:
 						self.user = False
 				elif task == "Sign Up":
+					details = values["Details"]
 					if details != "Error":
-						values = eval(details)
-						self.user = values
+						self.user = details
 					else:
 						self.user = False
 				elif task == "Send Friend Request":
-					values = eval(details)
 					self.user = values["CURR_USER"]
 					self.success_code = values["-SUCCESS_CODE-"]
 				elif task == "Respond Friend Request":
-					values = eval(details)
 					self.user = values["CURR_USER"]
 					self.success_code = values["-SUCCESS_CODE-"]
 			except ValueError:

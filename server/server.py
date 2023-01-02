@@ -36,23 +36,29 @@ class Server:
 			success, data = perform_task(data, addr, self.connections)
 			msg = ""
 			if success == 200:
-				msg = "Message::{}".format(str(data[1]))
+				values = {"TASK": "Message", "Details": data[1]}
+				msg = "{}".format(values)
 				data[0].send(bytes(msg, 'utf-8'))
 				msg = ""
 			elif data != None and success == 100:
-				msg = "Sign In::{}".format(str(data))
+				values = {"TASK": "Sign In", "Details": data}
+				msg = "{}".format(values)
 			elif data == None and success == 1:
-				msg = "Sign In::Error"
+				values = {"TASK": "Sign In", "Details": "Error"}
+				msg = "{}".format(values)
 			elif data == False:
-				msg = "Sign Up::Error"
+				values = {"TASK": "Sign Up", "Details": "Error"}
+				msg = "{}".format(values)
 			elif success == 500:
 				values = {"-SUCCESS_CODE-": success}
 				values.update(CURR_USER = data)
-				msg = "Respond Friend Request::{}".format(values)
+				values.update(TASK = "Respond Friend Request")
+				msg = "{}".format(values)
 			elif data != None:
 				values = {"-SUCCESS_CODE-": success}
 				values.update(CURR_USER = data)
-				msg = "Send Friend Request::{}".format(values)
+				values.update(TASK = "Send Friend Request")
+				msg = "{}".format(values)
 			
 			conn.send(bytes(msg, 'utf-8'))	# Send into back to user
 			# except TypeError:
