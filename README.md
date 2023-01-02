@@ -26,7 +26,7 @@ Originally, this was supposed to be an ecrypted messaging application where the 
 
 ### Build With
 
-* [![Flutter][flutter]][Flutter-url]
+* [![Flutter][python]][Python-url]
 
 <!-- GETTING STARTED -->
 ## Getting Started
@@ -50,8 +50,8 @@ You will be required to install the minimum requirements for flutter and setup y
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
-[flutter]: https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=Flutter&logoColor=blue
-[Flutter-url]: https://flutter.dev/
+[python]: https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=Python&logoColor=yellow
+[Python-url]: https://www.python.org/
 
 
 Coding:
