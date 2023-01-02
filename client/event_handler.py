@@ -1,5 +1,5 @@
 from scenes import *
-from db_handler import create_msg_file, generate_key_pair, write_key_pair, get_messages, write_message
+from db_handler import create_msg_file, get_messages, write_message
 
 def send(values, user_client, window):
 	write_message(values["-MESSAGE-"], user_client.get_user()["username"],
@@ -32,7 +32,7 @@ def sign_in(values, user_client, window):
 							friends_list(user_client.get_user()),
 							size=(MESSAGE_SCREEN_WIDTH,
 									MESSAGE_SCREEN_HEIGHT))
-		create_msg_file(user_client.get_user())
+		create_msg_file(user_client.get_user()["username"])
 	else:
 		window["-OUTPUT-"].update("Username or Password may be incorrect. User may not exist.")
 		user_client.set_user(None)
@@ -40,7 +40,6 @@ def sign_in(values, user_client, window):
 	return window
 
 def sign_up(values, user_client, window):
-	values, private_key, public_key = generate_key_pair(values)
 	user_client.sign_up(values)
 
 	# Wait until if found user or not
@@ -48,13 +47,13 @@ def sign_up(values, user_client, window):
 		pass
 	
 	if user_client.get_user() != False:
-		write_key_pair(values, private_key, public_key)
 		window.close()
 		window = sg.Window("Silent Message",
 							friends_list(user_client.get_user()),
 							element_justification='c',
 							size=(MESSAGE_SCREEN_WIDTH,
 									MESSAGE_SCREEN_HEIGHT))
+		create_msg_file(user_client.get_user()["username"])
 	else:
 		window["-OUTPUT-"].update("Username is already taken.")
 		user_client.set_user(None)
@@ -109,25 +108,7 @@ def pending_screen(event, user_client, window):
 			
 			# Wait until if sending friend request complete
 			while user_client.get_success_code() == None:
-				window = sg.Window("Silent Message",
-							pending_friends_scene(user_client.get_user()),
-							element_justification='c',
-							size=(MESSAGE_SCREEN_WIDTH,
-									MESSAGE_SCREEN_HEIGHT))
-		elif event == "-X_{}-".format(pending["username"]):
-			values = {"username": pending["username"], "-ACCEPT-": "NO"}
-			user_client.respond_friend_request(values)
-
-			# Wait until if sending friend request complete
-			while user_client.get_success_code() == None:
 				pass
-			
-			window.close()
-			window = sg.Window("Silent Message",
-						pending_friends_scene(user_client.get_user()),
-						element_justification='c',
-						size=(MESSAGE_SCREEN_WIDTH,
-								MESSAGE_SCREEN_HEIGHT))
 
 			window.close()
 			window = sg.Window("Silent Message",
@@ -218,7 +199,7 @@ def receive_message(values):
 def downloaded_message(values):
 	all_messages = values["MESSAGE"]
 	values.pop("MESSAGE")
-
+	create_msg_file(values["username"])
 	if all_messages is not None:
 		for block in all_messages:
 			sender = block["sender"]

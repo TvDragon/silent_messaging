@@ -15,6 +15,9 @@ def create_messages_file():
 	lock_messages.acquire()
 	if not exists(messages_filename):
 		f = open(messages_filename, "w")
+		messages = []
+		messages = json.dumps(messages, indent=4)
+		f.write(messages)
 		f.close()
 
 	lock_messages.release()
@@ -68,9 +71,6 @@ def write_to_db(new_user):
 		users = json.dumps(users, indent=4)
 		f.write(users)
 		f.close()
-		f = open("{}_public_key.pem".format(new_user["username"]), "wb")
-		f.write(new_user["public key"].encode("utf-8"))
-		f.close()
 		current_time = datetime.now()
 		text = "Time: {} - New User Added: {}".format(current_time,
 														new_user["username"])
@@ -102,13 +102,6 @@ def get_messages(receiver):
 
 	lock_messages.release()
 	return messages
-
-def get_user_key(receiver):
-	filename = "{}_public_key.pem".format(receiver)
-	if exists(filename):
-		return open(filename).read()
-
-	return None
 
 def write_messages(message, sender, receiver):
 	lock_messages.acquire()

@@ -1,11 +1,8 @@
 from hashlib import sha256
 from datetime import datetime
-from Crypto.Cipher import PKCS1_OAEP
-from Crypto.PublicKey import RSA
-import chardet
 
 from database import write_to_db, get_users, update_db, write_log_connection, \
-	create_messages_file, write_messages, get_messages, get_user_key
+	create_messages_file, write_messages, get_messages
 
 def log_connection_to_server(addr):
 	msg = "Time: {} - {}:{} connected".format(datetime.now(),
@@ -19,13 +16,10 @@ def log_disconnection_to_server(addr):
 
 def add_user(values):
 	hashed_password = sha256(values["-PASSWORD-"].encode('utf-8')).hexdigest()
-	public_key = values["PUBLIC_KEY"].decode("utf-8")
-
 	new_user = {
 		"username": values["-USERNAME-"],
 		"hashed password": hashed_password,
 		"email": values["-EMAIL-"],
-		"public key": public_key,	# Will need to convert this back to bytes when encrypting messages
 		"public_ip": "",
 		"friends": [],
 		"recent_dms": [],
@@ -145,20 +139,8 @@ def store_message_to_db(values):
 	sender = values["USERNAME"]
 	receiver = values["DM_PERSON"]
 	message = values["-MESSAGE-"]
-	key = get_user_key(receiver)
-	key = RSA.import_key(key)
-	cipher = PKCS1_OAEP.new(key)
-	ciphertext = str(cipher.encrypt(message.encode("utf-8")))
 
-	# text = ""
-	# for char in ciphertext:
-	# 	if char == '"':
-	# 		text += "\""
-	# 	text += char
-
-	# print(text)
-
-	write_messages(ciphertext, sender, receiver)
+	write_messages(message, sender, receiver)
 
 def perform_task(msg, addr, connections):
 
