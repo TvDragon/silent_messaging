@@ -47,16 +47,16 @@ Originally, this was supposed to be an ecrypted messaging application where the 
 
 1. Once you have performed the installation listed in the previous steps. Open up a terminal or command prompt and enter the command below to enter your virtual environment. The name of your folder like "env" will be what you named it when setting up the virtual environment.
 
-	source env/bin/activate
+		source env/bin/activate
 
 2. There will be a server and client version in their respective folders. The server version handles client connections and the client is the user. If you wish to run the server and/or client version run the commands below respectively.
 
-	python server/server.py
-	python client/main.py
+		python server/server.py
+		python client/main.py
 
 3. If you wish to deactive your virtual environment run the command below.
 
-	deactivate
+		deactivate
 
 <!-- Example -->
 ## Application Demonstration
