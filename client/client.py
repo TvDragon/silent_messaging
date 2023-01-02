@@ -51,34 +51,34 @@ class Client:
 				break
 
 			data = data.decode('utf-8')
-			try:
-				task, details = data.split("::")
+			# try:
+			task, details = data.split("::")
 
-				if task == "Message":
-					receive_message(details)
-				elif task == "Sign In":
-					if details != "Error":
-						values = eval(details)
-						values = downloaded_message(values)
-						self.user = values
-					else:
-						self.user = False
-				elif task == "Sign Up":
-					if details != "Error":
-						values = eval(details)
-						self.user = values
-					else:
-						self.user = False
-				elif task == "Send Friend Request":
+			if task == "Message":
+				receive_message(details)
+			elif task == "Sign In":
+				if details != "Error":
 					values = eval(details)
-					self.user = values["CURR_USER"]
-					self.success_code = values["-SUCCESS_CODE-"]
-				elif task == "Respond Friend Request":
+					values = downloaded_message(values)
+					self.user = values
+				else:
+					self.user = False
+			elif task == "Sign Up":
+				if details != "Error":
 					values = eval(details)
-					self.user = values["CURR_USER"]
-					self.success_code = values["-SUCCESS_CODE-"]
-			except ValueError:
-				pass
+					self.user = values
+				else:
+					self.user = False
+			elif task == "Send Friend Request":
+				values = eval(details)
+				self.user = values["CURR_USER"]
+				self.success_code = values["-SUCCESS_CODE-"]
+			elif task == "Respond Friend Request":
+				values = eval(details)
+				self.user = values["CURR_USER"]
+				self.success_code = values["-SUCCESS_CODE-"]
+			# except ValueError:
+			# 	pass
 
 	def __init__(self):
 		self.sock.connect((self.ip_addr, 10000))	# Connect to server with client's ip addr and port

@@ -219,8 +219,8 @@ def downloaded_message(values):
 			sender = block["sender"]
 			messages = block["messages"]
 			for message in messages:
-				# decrypted_msg = decrypt_message(cipher, message)
-				# print(decrypted_msg)
+				decrypted_msg = decrypt_message(cipher, message)
+				print(decrypted_msg)
 				write_message(message, values["username"], sender, sender)
 
 	return values

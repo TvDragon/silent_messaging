@@ -2,7 +2,6 @@ from hashlib import sha256
 from datetime import datetime
 from Crypto.Cipher import PKCS1_OAEP
 from Crypto.PublicKey import RSA
-import codecs
 
 from database import write_to_db, get_users, update_db, write_log_connection, \
 	create_messages_file, write_messages, get_messages, get_user_key
