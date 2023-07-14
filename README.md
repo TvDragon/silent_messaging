@@ -25,7 +25,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-Originally, this was supposed to be an ecrypted messaging application where the messages would be encrypted before being send over the server however, I ran into issues trying to convert the encrypted messages into a string so I had to remove that from this project. Although, this is something that I'd like to work back on in the near future. This project is a messaging application on the desktop like other social messaging applications like skype and discord however, the messages would be stored on the users PC instead of on a server permanently. This was made as I wanted to learn how users were able to message someone over the internet using sockets and also used some knowledge on multithreading which I took a course in during university to create this application. It is noted that messages are stored temporarily on the server but the messages will be deleted once the receiver has logged on to retrieve those messages.
+Originally, this was supposed to be an encrypted messaging application where the messages would be encrypted before being sent over to the server however, I ran into issues trying to convert the encrypted messages into a string so I had to remove that from this project. Although, this is something that I'd like to work back on in the near future. This project is a messaging application on the desktop like other social messaging applications like Skype and discord however, the messages would be stored on the user's PC instead of on a server permanently. This was made as I wanted to learn how users were able to message someone over the internet using sockets and also used some knowledge on multithreading which I took a course in during university to create this application. It is noted that messages are stored temporarily on the server but the messages will be deleted once the receiver has logged on to retrieve those messages.
 
 ### Build With
 
@@ -36,9 +36,9 @@ Originally, this was supposed to be an ecrypted messaging application where the 
 
 ### Prerequisites
 
-1. Install python if you don't already have it which you can follow from this [website](https://realpython.com/installing-python/).
+1. Install Python if you don't already have it which you can follow from this [website](https://realpython.com/installing-python/).
 
-2. Install the python virtual environment.
+2. Install the Python virtual environment.
 
 		pip install virtualenv
 
@@ -48,11 +48,11 @@ Originally, this was supposed to be an ecrypted messaging application where the 
 
 2. Open up your terminal or Command Prompt/Powershell and move into the directory that you cloned repository or downloaded the file to.
 
-3. Enter the commands below into your teminal in that directory to create the virtual environment.
+3. Enter the commands below into your terminal in that directory to create the virtual environment.
 
 		python3 -m venv env
 
-4. If you're using linux or Mac run the command below. Otherwise, skip to step 5.
+4. If you're using Linux or Mac run the command below. Otherwise, skip to step 5.
 
 		source env/bin/activate
 
@@ -65,7 +65,7 @@ Originally, this was supposed to be an ecrypted messaging application where the 
 
 		pip install -r requirements.txt
 
-This will install the libraries that will required which I've already listed inside the `requirements.txt` file.
+This will install the libraries that will be required which I've already listed inside the `requirements.txt` file.
 
 <!-- USAGE EXAMPLES -->
 ## Usage
@@ -79,12 +79,12 @@ This will install the libraries that will required which I've already listed ins
 		python server.py
 		python main.py
 
-3. If you wish to deactive your virtual environment run the command below.
+3. If you wish to deactivate your virtual environment run the command below.
 
 		deactivate
 
 <!-- Example -->
-## Screenshots of application
+## Screenshots of the application
 
 ### 1) Sign Up
 ![sign up image](./images/sign_up.jpg)
